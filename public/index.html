@@ -16,6 +16,13 @@
       <h1>FREKVENS AFSTANDSBEDIENING</h1>
     </header>
 
+    <textarea id="script"><!--
+-->const x = Math.cos(t) * 8 + 8 | 0;
+const y = Math.sin(t) * 8 + 8 | 0;
+
+pixels[y * 16 + x] = 1;      
+    </textarea>
+    
     <script>init(io());</script>
 
     <!--div class="glitchButton" style="position:fixed;top:2em;right:20px;"></div>

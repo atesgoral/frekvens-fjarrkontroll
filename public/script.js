@@ -14,4 +14,10 @@ function init(socket) {
   socket.on('disconnect', () => {
     console.log('Disconnected');
   });
+  
+  const scriptEl = document.querySelector('#script');
+  
+  scriptEl.addEventListener('change', () => {
+    console.log('script:', scriptEl.value);
+  });
 }

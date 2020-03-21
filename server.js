@@ -17,7 +17,8 @@ io.on('connection', (socket) => {
   
   socket.on('identify', (secret) => {
     if (secret === process.env.FREKVENS_CLIENT_SECRET) {
-      console.log('FREKVENS connected');
+      console.log('FREKVENS authorized');
+      
       frekvens.socket = socket;
       
       socket.on('red', () => socket.broadcast.emit('red'));
