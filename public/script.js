@@ -47,11 +47,21 @@ function init(socket) {
   
   function drawFront(t) {
     requestAnimationFrame(drawFront);
-    
-    frontCtx.fillStyle = '#fff';
 
+    pixels.fill(0);
+
+    frontCtx.fillStyle = '#111';
+    frontCtx.fillRect(0, 0, (3 + 7 / 8), (3 + 7 / 8));
+    
+    renderFn(pixels, t / 1000);
+    
     for (let row = 0; row < 16; row++) {
       for (let col = 0; col < 16; col++) {
+        
+        frontCtx.fillStyle = pixels[row * 16 + col]
+          ? '#fff'
+          :'#222';
+        
         frontCtx.beginPath();
         frontCtx.arc(
           (col + 1) * 3 / 16,
