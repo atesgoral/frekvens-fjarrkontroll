@@ -13,3 +13,11 @@ h1 {
   margin: 0;
   text-transform: uppercase;
 }
+
+#frekvens {
+  display: flex;
+}
+
+#frekvens canvas {
+  border: 1px solid red;
+}

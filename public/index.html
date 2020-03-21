@@ -16,12 +16,19 @@
       <h1>FREKVENS Fjärrkontroll</h1>
     </header>
 
-    <textarea id="script">
+    <section id="frekvens">
+      <canvas id="front"></canvas>
+      <canvas id="back"></canvas>
+    </section>
+    
+    <section id="code">
+      <textarea id="script">
 const x = Math.cos(t) * 8 + 8 | 0;
 const y = Math.sin(t) * 8 + 8 | 0;
 
 pixels[y * 16 + x] = 1;      
-    </textarea>
+      </textarea>
+    </section>
     
     <script>init(io());</script>
 
