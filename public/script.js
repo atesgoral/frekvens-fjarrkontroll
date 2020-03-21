@@ -33,6 +33,10 @@ function init(socket) {
   });
   
   const frontEl = document.querySelector('#front');
+  
+  frontEl.width = frontEl.clientWidth;
+  frontEl.height = frontEl.clientHeight;
+  
   const frontCtx = frontEl.getContext('2d');
   
   const pixels = new Uint8Array(16 * 16);
@@ -40,7 +44,9 @@ function init(socket) {
   function drawFront(t) {
     requestAnimationFrame(drawFront);
     
-    
+    for (let row = 0; row < 16; row++)
+    frontCtx.fillStyle = 'red';
+    frontCtx.fillRect(10, 10, 10, 10);
   }
   
   requestAnimationFrame(drawFront);
