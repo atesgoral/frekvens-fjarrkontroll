@@ -1,26 +1,19 @@
-const express = require('express');
 const http = require('http');
+
+const express = require('express');
 const socketIo = require('socket.io');
 
 const app = express();
 
-http.createServer(app);
-
-const io = socketIo(http);
-
 app.use(express.static('public'));
 
-app.get('/', (request, response) => {
-  response.sendFile(__dirname + "/views/index.html");
-});
-
-
-
+const server = http.createServer(app);
+const io = socketIo(server);
 
 io.on('connection', (socket) => {
   console.log('Client connected');
 });
 
-http.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log('Listening on', process.env.PORT);
 });
