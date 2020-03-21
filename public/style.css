@@ -41,10 +41,6 @@ section {
   height: 100%;
 }
 
-#frekvens canvas:first-child {
-  margin-right: 2rem;
-}
-
 #code {
   display: flex;
 }
