@@ -11,4 +11,5 @@ body {
 h1 {
   font-family: 'Montserrat', sans-serif;
   margin: 0;
+  text-transform: uppercase;
 }
