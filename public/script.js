@@ -24,9 +24,24 @@ function init(socket) {
   
   const scriptEl = document.querySelector('#script');
   
+  const renderFn = new Function([ 'pixels', 't' ], scriptEl.value);
+  
   scriptEl.addEventListener('change', () => {
     const script = scriptEl.value;
     
     socket.emit('script', script);
   });
+  
+  const frontEl = document.querySelector('#front');
+  const frontCtx = frontEl.getContext('2d');
+  
+  const pixels = new Uint8Array(16 * 16);
+  
+  function drawFront(t) {
+    requestAnimationFrame(drawFront);
+    
+    
+  }
+  
+  requestAnimationFrame(drawFront);
 }
