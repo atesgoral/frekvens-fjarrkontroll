@@ -4,7 +4,7 @@ body {
   font-size: 100%;
   margin: 0;
   padding: 2rem;
-  background: #111;
+  background: #000;
   color: #ccc;
 }
 
@@ -31,7 +31,7 @@ section {
 }
 
 #frekvens canvas {
-  background: #000;
+  background: #111;
   position: absolute;
   top: 0;
   right: 0;
@@ -51,8 +51,10 @@ section {
 
 #code textarea {
   flex-grow: 1;
-  background: 0;
+  background: #222;
   color: #eee;
   font-family: monospace;
   border: 1px solid black;
+  font-size: 125%;
+  padding: 1rem;
 }
