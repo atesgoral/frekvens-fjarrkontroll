@@ -1,6 +1,8 @@
 function init(socket) {
   socket.on('connect', () => {
     console.log('Connected');
+    
+    
   });
   
   socket.on('red', () => {

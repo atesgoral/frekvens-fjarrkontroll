@@ -24,20 +24,17 @@ io.on('connection', (socket) => {
       
       socket.on('red', () => socket.broadcast.emit('red'));
       socket.on('yellow', () => socket.broadcast.emit('yellow'));
-    if (secret === process.env.FREKVENS_CLIENT_SECRET) {
-      console.log('FREKVENS authorized');
+    } else if (secret === process.env.UI_CLIENT_SECRET) {
+      console.log('UI authorized');
       
-      frekvens.socket = socket;
+      ui.socket = socket;
       
-      socket.on('red', () => socket.broadcast.emit('red'));
-      socket.on('yellow', () => socket.broadcast.emit('yellow'));
+      socket.on('script', (script) => {
+        frekvens.socket && frekvens.socket.emit('script', script);
+      });
     }
   });
-  
-  socket.on('script', (script) => {
-    frekvens.socket && frekvens.socket.emit('script', script);
-  });
- 
+   
   socket.on('disconnect', () => {
     frekvens.socket = null;
   });
