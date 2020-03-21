@@ -8,7 +8,7 @@ function init(socket) {
   });
 
   socket.on('yellow', () => {
-    console.log('Red button pressed');
+    console.log('Yellow button pressed');
   });
   
   socket.on('disconnect', () => {

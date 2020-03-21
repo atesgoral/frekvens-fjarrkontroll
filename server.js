@@ -10,7 +10,7 @@ app.use(express.static('public'));
 const server = http.createServer(app);
 const io = socketIo(server);
 
-let frekvens = null;
+const frekvens = { socket: null };
 
 io.on('connection', (socket) => {
   console.log('Client connected');
@@ -18,11 +18,15 @@ io.on('connection', (socket) => {
   socket.on('identify', (secret) => {
     if (secret === process.env.FREKVENS_CLIENT_SECRET) {
       console.log('FREKVENS connected');
+      frekvens.socket = socket;
+      
+      socket.on('red', () => socket.broadcast.emit('red'));
+      socket.on('yellow', () => socket.broadcast.emit('yellow'));
     }
   });
-  
+ 
   socket.on('disconnect', () => {
-    frekvens = null;
+    frekvens.socket = null;
   });
 });
 
