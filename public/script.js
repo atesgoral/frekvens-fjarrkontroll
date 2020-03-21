@@ -39,6 +39,10 @@ function init(socket) {
   
   const frontCtx = frontEl.getContext('2d');
   
+  const scale = frontEl.clientWidth / (3 + 7 / 8);
+  
+  frontCtx.scale(scale, scale);
+  
   const pixels = new Uint8Array(16 * 16);
   
   function drawFront(t) {
@@ -49,7 +53,13 @@ function init(socket) {
     for (let row = 0; row < 16; row++) {
       for (let col = 0; col < 16; col++) {
         frontCtx.beginPath();
-        frontCtx.arc(col * )
+        frontCtx.arc(
+          (col + 1) * 3 / 16,
+          (row + 1) * 3 / 16,
+          1 / 16, 0,
+          Math.PI * 2
+        );
+        frontCtx.fill();
       }
     }
     
