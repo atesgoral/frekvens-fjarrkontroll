@@ -8,13 +8,15 @@
     <meta name="description" content="Controls a hacked FREKVENS LED light cube">
     <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
     <link rel="stylesheet" href="/style.css">
-    <script src="/lib/socket.io/socket.io.js"></script>
-    <script src="/script.js" defer></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/script.js"></script>
   </head>
   <body>
     <header>
       <h1>FREKVENS AFSTANDSBEDIENING</h1>
     </header>
+
+    <script>init(io());</script>
 
     <!--div class="glitchButton" style="position:fixed;top:2em;right:20px;"></div>
     <script src="https://button.glitch.me/button.js"></script-->

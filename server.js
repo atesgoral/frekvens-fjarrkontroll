@@ -5,7 +5,6 @@ const socketIo = require('socket.io');
 
 const app = express();
 
-app.use('/lib', express.static('node_modules'));
 app.use(express.static('public'));
 
 const server = http.createServer(app);
