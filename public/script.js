@@ -44,9 +44,15 @@ function init(socket) {
   function drawFront(t) {
     requestAnimationFrame(drawFront);
     
-    for (let row = 0; row < 16; row++)
     frontCtx.fillStyle = 'red';
-    frontCtx.fillRect(10, 10, 10, 10);
+
+    for (let row = 0; row < 16; row++) {
+      for (let col = 0; col < 16; col++) {
+        frontCtx.beginPath();
+        frontCtx.arc(col * )
+      }
+    }
+    
   }
   
   requestAnimationFrame(drawFront);
