@@ -11,6 +11,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const frekvens = { socket: null };
+const ui = { socket: null };
 
 io.on('connection', (socket) => {
   console.log('Client connected');
@@ -23,7 +24,18 @@ io.on('connection', (socket) => {
       
       socket.on('red', () => socket.broadcast.emit('red'));
       socket.on('yellow', () => socket.broadcast.emit('yellow'));
+    if (secret === process.env.FREKVENS_CLIENT_SECRET) {
+      console.log('FREKVENS authorized');
+      
+      frekvens.socket = socket;
+      
+      socket.on('red', () => socket.broadcast.emit('red'));
+      socket.on('yellow', () => socket.broadcast.emit('yellow'));
     }
+  });
+  
+  socket.on('script', (script) => {
+    frekvens.socket && frekvens.socket.emit('script', script);
   });
  
   socket.on('disconnect', () => {

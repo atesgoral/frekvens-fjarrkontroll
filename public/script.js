@@ -1,5 +1,5 @@
 function init(socket) {
-  socket.on('connect', (client) => {
+  socket.on('connect', () => {
     console.log('Connected');
   });
   
@@ -18,6 +18,8 @@ function init(socket) {
   const scriptEl = document.querySelector('#script');
   
   scriptEl.addEventListener('change', () => {
-    console.log('script:', scriptEl.value);
+    const script = scriptEl.value;
+    
+    socket.emit('script', script);
   });
 }
