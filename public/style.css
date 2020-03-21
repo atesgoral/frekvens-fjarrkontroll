@@ -31,7 +31,7 @@ section {
 }
 
 #frekvens canvas {
-  background: red;
+  background: #000;
   position: absolute;
   top: 0;
   right: 0;
@@ -54,5 +54,5 @@ section {
   background: 0;
   color: #eee;
   font-family: monospace;
-  
+  border: 1px solid black;
 }
