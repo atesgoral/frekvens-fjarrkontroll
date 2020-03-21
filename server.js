@@ -32,6 +32,8 @@ io.on('connection', (socket) => {
       socket.on('script', (script) => {
         frekvens.socket && frekvens.socket.emit('script', script);
       });
+    } else {
+      console.log('Unauthorized');
     }
   });
    
