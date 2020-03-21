@@ -1,10 +1,14 @@
 function init(socket) {
-  socket.on('connect', () => {
+  socket.on('connect', (client) => {
     console.log('Connected');
   });
   
-  socket.on('event', (data) => {
-    console.log('Data', data);
+  socket.on('red', () => {
+    console.log('Red button pressed');
+  });
+
+  socket.on('yellow', () => {
+    console.log('Red button pressed');
   });
   
   socket.on('disconnect', () => {
