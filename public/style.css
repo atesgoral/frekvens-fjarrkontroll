@@ -19,15 +19,12 @@ section {
   
 }
 #frekvens {
-/*   display: flex; */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+  grid-template-columns: auto auto;
   grid-gap: 2rem;
 }
 
 #frekvens .canvas-container {
-/*   flex-grow: 1; */
-/*   width: 40vw; */
   padding-top: 100%;
   box-sizing: border-box;
   position: relative;
@@ -41,6 +38,7 @@ section {
   left: 0;
   bottom: 0;
   width: 100%;
+  height: 100%;
 }
 
 #frekvens canvas:first-child {
