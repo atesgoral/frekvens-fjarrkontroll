@@ -14,10 +14,31 @@ h1 {
   text-transform: uppercase;
 }
 
+section {
+  margin-top: 2rem;
+  
+}
 #frekvens {
   display: flex;
 }
 
 #frekvens canvas {
   border: 1px solid red;
+  flex-grow: 1;
+}
+
+#frekvens canvas:first-child {
+  margin-right: 2rem;
+}
+
+#code {
+  display: flex;
+}
+
+#code textarea {
+  flex-grow: 1;
+  background: 0;
+  color: #eee;
+  font-family: monospace;
+  
 }
