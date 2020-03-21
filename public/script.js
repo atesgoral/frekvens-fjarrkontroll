@@ -37,9 +37,14 @@ function init(socket) {
   frontEl.width = frontEl.clientWidth;
   frontEl.height = frontEl.clientHeight;
   
+  console.log(frontEl.clientWidth, frontEl.clientHeight);
+  
   const frontCtx = frontEl.getContext('2d');
   
-  const scale = frontEl.clientWidth / (3 + 7 / 8);
+  const COLS = 16;
+  const ROWS = 16;
+  
+  const scale = frontEl.width / (3 + 7 / 8);
   
   frontCtx.scale(scale, scale);
   
