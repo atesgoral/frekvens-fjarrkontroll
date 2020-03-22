@@ -42,9 +42,14 @@ function extractSource(fn) {
 }
   
 function init(socket) {
+  let timeSyncInterval = null;
+  
   socket.on('connect', () => {
     console.log('Connected');
-    
+  
+    timeSyncInterval = setInterval(() => {
+      
+    }, )
     const match = /secret=(.+)/.exec(document.cookie);
     
     if (match) {
