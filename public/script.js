@@ -25,10 +25,12 @@ function init(socket) {
   const faviconLinkEl = document.querySelector('#favicon'); 
   const scriptEl = document.querySelector('#script');
     
-  const renderFn = new Function([ 'pixels', 't' ], scriptEl.value);
+  let renderFn = new Function([ 'pixels', 't' ], scriptEl.value);
   
   scriptEl.addEventListener('change', () => {
     const script = scriptEl.value;
+    
+    renderFn = new Function([ 'pixels', 't' ], script);
     
     socket.emit('script', script);
   });

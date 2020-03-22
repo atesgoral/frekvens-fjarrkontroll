@@ -24,6 +24,10 @@ io.on('connection', (socket) => {
       
       socket.on('red', () => socket.broadcast.emit('red'));
       socket.on('yellow', () => socket.broadcast.emit('yellow'));
+      
+      socket.on('disconnect', () => {
+        frekvens.socket = null;
+      });      
     } else if (secret === process.env.UI_CLIENT_SECRET) {
       console.log('UI authorized');
       
@@ -32,14 +36,14 @@ io.on('connection', (socket) => {
       socket.on('script', (script) => {
         frekvens.socket && frekvens.socket.emit('script', script);
       });
+
+      socket.on('disconnect', () => {
+        ui.socket = null;
+      });      
     } else {
       console.log('Unauthorized');
     }
-  });
-   
-  socket.on('disconnect', () => {
-    frekvens.socket = null;
-  });
+  });   
 });
 
 server.listen(process.env.PORT, () => {
