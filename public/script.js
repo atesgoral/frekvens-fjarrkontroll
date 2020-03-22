@@ -7,6 +7,11 @@ function init(socket) {
     if (tokens) {
       const secret = tokens[1];
       socket.emit('identify', secret);
+      
+      socket.on('drive', () => {
+        scriptEl.removeAttribute('disabled');
+        setTimeout(() => scriptEl.focus(), 100);
+      });
     }
   });
    
@@ -80,28 +85,44 @@ function init(socket) {
 
     faviconCtx.fillStyle = '#111';
     faviconCtx.fillRect(0, 0, COLS, ROWS);
-    
-    renderFn(pixels, t / 1000);
-        
-    for (let row = 0; row < ROWS; row++) {
-      for (let col = 0; col < COLS; col++) {
-        
-        frontCtx.fillStyle = pixels[row * COLS + col]
-          ? '#fff'
-          : '#222';
-        
-        frontCtx.beginPath();
-        frontCtx.arc(
-          GUTTER + PIXEL_RADIUS + col * PIXEL_OC,
-          GUTTER + PIXEL_RADIUS + row * PIXEL_OC,
-          PIXEL_RADIUS,
-          0,
-          Math.PI * 2
-        );
-        frontCtx.fill();
-        
-        faviconCtx.fillStyle = frontCtx.fillStyle;
-        faviconCtx.fillRect(col, row, 1, 1);
+
+    if (renderFn) {
+      try {
+        renderFn(pixels, t / 1000);
+      } catch (error) {
+        renderFn = null;
+        errorEl.innerHTML = `Runtime error: ${error.message}`;
+      }
+    }
+     
+    if (renderFn) {
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+
+          frontCtx.fillStyle = pixels[row * COLS + col]
+            ? '#fff'
+            : '#222';
+
+          // frontCtx.beginPath();
+          // frontCtx.arc(
+          //   GUTTER + PIXEL_RADIUS + col * PIXEL_OC,
+          //   GUTTER + PIXEL_RADIUS + row * PIXEL_OC,
+          //   PIXEL_RADIUS,
+          //   0,
+          //   Math.PI * 2
+          // );
+          // frontCtx.fill();
+          
+          frontCtx.fillRect(
+            GUTTER + col * PIXEL_OC,
+            GUTTER + row * PIXEL_OC,
+            PIXEL_RADIUS * 2,
+            PIXEL_RADIUS * 2
+          );
+
+          faviconCtx.fillStyle = frontCtx.fillStyle;
+          faviconCtx.fillRect(col, row, 1, 1);
+        }
       }
     }
     
