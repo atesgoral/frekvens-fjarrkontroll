@@ -12,20 +12,21 @@ h1 {
   font-family: 'Montserrat', sans-serif;
   margin: 0 auto;
   text-align: center;
-  width: 600px;
+  width: 50vw;
   text-transform: uppercase;  
 }
 
 section {
   margin: 2rem auto 0;
-  width: 600px;
+  width: 50vw;
 }
 
 #frekvens {
 }
 
 #frekvens #front {
-/*   width: 100%; */
+  width: 50vw;
+  height: 50vw;
   background: #111;
 }
 

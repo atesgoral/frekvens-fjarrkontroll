@@ -20,11 +20,8 @@ io.on('connection', (socket) => {
     if (secret === process.env.FREKVENS_CLIENT_SECRET) {
       console.log('FREKVENS authorized');
       
-      frekvens.socket = socket;
-      
-      socket.on('red', () => socket.broadcast.emit('red'));
-      socket.on('yellow', () => socket.broadcast.emit('yellow'));
-      
+      frekvens.socket = socket;     
+     
       socket.on('disconnect', () => {
         frekvens.socket = null;
       });      
@@ -32,6 +29,8 @@ io.on('connection', (socket) => {
       console.log('UI authorized');
       
       ui.socket = socket;
+      
+      socket.emit('drive');
       
       socket.on('script', (script) => {
         frekvens.socket && frekvens.socket.emit('script', script);

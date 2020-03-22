@@ -9,15 +9,7 @@ function init(socket) {
       socket.emit('identify', secret);
     }
   });
-  
-  socket.on('red', () => {
-    console.log('Red button pressed');
-  });
-
-  socket.on('yellow', () => {
-    console.log('Yellow button pressed');
-  });
-  
+   
   socket.on('disconnect', () => {
     console.log('Disconnected');
   });
@@ -37,8 +29,8 @@ function init(socket) {
   
   const frontEl = document.querySelector('#front');
   
-  frontEl.width = frontEl.clientWidth;
-  frontEl.height = frontEl.clientHeight;
+  frontEl.width = frontEl.clientWidth * 2;
+  frontEl.height = frontEl.clientHeight * 2;
     
   const frontCtx = frontEl.getContext('2d');
   
