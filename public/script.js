@@ -1,4 +1,17 @@
-const defaultRenderFn = function (pixels, t) {
+const COLS = 16;
+const ROWS = 16;
+const PIXEL_RADIUS = 1;
+const PIXEL_SPACING = 1;
+const PIXEL_OC = 2 * PIXEL_RADIUS + PIXEL_SPACING; // center-to-center
+const GUTTER = 2;
+const CUBE_WIDTH = GUTTER * 2
+  + PIXEL_RADIUS * 2 * COLS
+  + PIXEL_SPACING * (COLS - 1);
+const CUBE_HEIGHT = GUTTER * 2
+  + PIXEL_RADIUS * 2 * ROWS
+  + PIXEL_SPACING * (ROWS - 1);
+
+const DEFAULT_RENDER_FN = function (pixels, t) {
   const x = Math.cos(t) * 8 + 8 | 0;
   const y = Math.sin(t) * 8 + 8 | 0;
 
@@ -38,11 +51,13 @@ function init(socket) {
   const faviconLinkEl = document.querySelector('#favicon'); 
   const scriptEl = document.querySelector('#script');
   const errorEl = document.querySelector('#error');
+  const frontEl = document.querySelector('#front');
+  const maskEl = document.createElement('canvas');
+  const faviconEl = document.createElement('canvas');
     
-  let renderFn = defaultRenderFn;
-  
-  
-  scriptEl.value = extractSource(defaultRenderFn);
+  let renderFn = DEFAULT_RENDER_FN;
+    
+  scriptEl.value = extractSource(DEFAULT_RENDER_FN);
   
   scriptEl.addEventListener('change', () => {
     const script = scriptEl.value;
@@ -59,39 +74,49 @@ function init(socket) {
     
     socket.emit('script', script);    
   });
-  
-  const frontEl = document.querySelector('#front');
-  
+    
   frontEl.width = frontEl.clientWidth * 2;
   frontEl.height = frontEl.clientHeight * 2;
     
-  const frontCtx = frontEl.getContext('2d');
+  maskEl.width = frontEl.width;
+  maskEl.height = frontEl.height;
+
+  faviconEl.width = COLS;
+  faviconEl.height = ROWS;
   
-  const COLS = 16;
-  const ROWS = 16;
-  const PIXEL_RADIUS = 1;
-  const PIXEL_SPACING = 1;
-  const PIXEL_OC = 2 * PIXEL_RADIUS + PIXEL_SPACING; // center-to-center
-  const GUTTER = 2;
-  const CUBE_WIDTH = GUTTER * 2
-    + PIXEL_RADIUS * 2 * COLS
-    + PIXEL_SPACING * (COLS - 1);
-  const CUBE_HEIGHT = GUTTER * 2
-    + PIXEL_RADIUS * 2 * ROWS
-    + PIXEL_SPACING * (ROWS - 1);
+  const frontCtx = frontEl.getContext('2d');
+  const maskCtx = maskEl.getContext('2d');
+  const faviconCtx = faviconEl.getContext('2d');
   
   frontCtx.scale(
     frontEl.width / CUBE_WIDTH,
     frontEl.height / CUBE_HEIGHT
   );
 
-  const faviconEl = document.createElement('canvas');
-  
-  faviconEl.width = COLS;
-  faviconEl.height = ROWS;
-  
-  const faviconCtx = faviconEl.getContext('2d');
-  
+  maskCtx.scale(
+    maskEl.width / CUBE_WIDTH,
+    maskEl.height / CUBE_HEIGHT
+  );
+
+  maskCtx.fillStyle = '#111';
+  maskCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
+
+  maskCtx.fillStyle = '#fff';
+
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      maskCtx.beginPath();
+      maskCtx.arc(
+        GUTTER + PIXEL_RADIUS + col * PIXEL_OC,
+        GUTTER + PIXEL_RADIUS + row * PIXEL_OC,
+        PIXEL_RADIUS,
+        0,
+        Math.PI * 2
+      );
+      maskCtx.fill();
+    }
+  }
+    
   const pixels = new Uint8Array(ROWS * COLS);
   
   function drawFront(t) {
@@ -152,6 +177,8 @@ function init(socket) {
 
 //     frontCtx.fillStyle = '#111';
 //     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
+    
+    frontCtx.drawImage(maskEl, 0, 0);
     
     faviconLinkEl.href = faviconEl.toDataURL('image/png');
   }
