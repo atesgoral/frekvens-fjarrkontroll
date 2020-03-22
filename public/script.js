@@ -165,7 +165,7 @@ function init(socket) {
 
     // if (epoch === null) {
     //   epoch = t;
-    // }
+    //} 
     
     // const elapsed = t - epoch;
     
