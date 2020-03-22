@@ -23,7 +23,7 @@ const DEFAULT_RENDER_FN = function (pixels, t) {
   pixels[y2 * 16 + x2] = 1;
 };
 
-const DIFFUSE_DISTANCE = 2;
+const DIFFUSE_DISTANCE = 5;
 const DIFFUSE_DIAMETER = DIFFUSE_DISTANCE * 2 + 1;
 const diffuseFilter = Array(DIFFUSE_DIAMETER ** 2).fill(0);
 
@@ -32,10 +32,12 @@ for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
     const d = Math.sqrt(
       (dx - DIFFUSE_DISTANCE) ** 2 + (dy - DIFFUSE_DISTANCE) ** 2
     );
-    const falloff = (d / (DIFFUSE_DISTANCE + 1)) ** .4;
+    const falloff = d > DIFFUSE_DISTANCE ? 1 : (d / (DIFFUSE_DISTANCE + 1)) ** .2;
     diffuseFilter[dy * DIFFUSE_DIAMETER + dx] = 1 - falloff;
   }
 }
+
+console.log(diffuseFilter);
 
 function extractSource(fn) {
   return fn
@@ -228,7 +230,7 @@ function init(socket) {
         frontCtx.fillStyle = `hsl(
           0,
           0%,
-          ${(levels[row * COLS + col] * 0.9 + 0.1) * 100}%
+          ${(levels[row * COLS + col] * 0.95 + 0.05) * 100}%
         `;
 
         frontCtx.fillRect(
