@@ -127,10 +127,10 @@ function init(socket) {
 
     pixels.fill(0);
 
-    frontCtx.fillStyle = '#111';
+    frontCtx.fillStyle = '#000';
     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
 
-    faviconCtx.fillStyle = '#111';
+    faviconCtx.fillStyle = '#000';
     faviconCtx.fillRect(0, 0, COLS, ROWS);
 
     if (renderFn) {
@@ -141,12 +141,20 @@ function init(socket) {
         errorEl.innerHTML = `Runtime error: ${error.message}`;
       }
     }
-     
+    
     if (renderFn) {
+      const levels = Array(16 * 16).fill(0);
+
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+          levels[row * COLS + col] = pixels[row * COLS + col];
+        }
+      }
+      
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
 
-          frontCtx.fillStyle = pixels[row * COLS + col]
+          frontCtx.fillStyle = `hsl(0, 0, ${pixels[row * COLS + col]}pixels[row * COLS + col]
             ? '#fff'
             : '#222';
           
@@ -165,6 +173,9 @@ function init(socket) {
        
     frontCtx.globalCompositeOperation = 'multiply';
     frontCtx.drawImage(maskEl, 0, 0, CUBE_WIDTH, CUBE_HEIGHT);
+    frontCtx.globalCompositeOperation = 'screen';
+    frontCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+    frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
     frontCtx.globalCompositeOperation = 'source-over';
     
     faviconLinkEl.href = faviconEl.toDataURL('image/png');
