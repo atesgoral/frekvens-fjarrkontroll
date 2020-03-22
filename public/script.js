@@ -35,6 +35,7 @@ function init(socket) {
     
     if (match) {
       const secret = match[1];
+      
       socket.emit('identify', secret);
       
       socket.on('drive', () => {
