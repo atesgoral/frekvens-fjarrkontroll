@@ -1,16 +1,29 @@
+const defaultRenderFn = function (pixels, t) {
+  const x = Math.cos(t) * 8 + 8 | 0;
+  const y = Math.sin(t) * 8 + 8 | 0;
+
+  pixels[y * 16 + x] = 1;        
+};
+
+function extractSource(fn) {
+  const match = /^function+(?:.+?)+\{(.+?)\}/.exec(fn.toString());
+  
+  return match && match[1];
+}
+  
 function init(socket) {
   socket.on('connect', () => {
     console.log('Connected');
     
-    const tokens = /secret=(.+)/.exec(document.cookie);
+    const match = /secret=(.+)/.exec(document.cookie);
     
-    if (tokens) {
-      const secret = tokens[1];
+    if (match) {
+      const secret = match[1];
       socket.emit('identify', secret);
       
       socket.on('drive', () => {
         scriptEl.removeAttribute('disabled');
-        setTimeout(() => scriptEl.focus(), 100);
+        scriptEl.focus({ preventScroll: true });
       });
     }
   });
@@ -23,7 +36,10 @@ function init(socket) {
   const scriptEl = document.querySelector('#script');
   const errorEl = document.querySelector('#error');
     
-  let renderFn = new Function([ 'pixels', 't' ], scriptEl.value);
+  let renderFn = defaultRenderFn;
+  
+  
+  scriptEl.value = extractSource(defaultRenderFn);
   
   scriptEl.addEventListener('change', () => {
     const script = scriptEl.value;
