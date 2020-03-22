@@ -43,13 +43,24 @@ function extractSource(fn) {
   
 function init(socket) {
   let timeSyncInterval = null;
+  let syncDelta = 0;
+  let targetSyncDelta = 0;
   
   socket.on('connect', () => {
     console.log('Connected');
   
     timeSyncInterval = setInterval(() => {
-      
-    }, )
+      socket.emit('sync', { client: Date.now() });  
+    }, 1000);
+
+    socket.on('sync', (syncInfo) => {
+      const now = Date.now();
+      const latency = (now - syncInfo.client) / 2;
+
+      targetSyncDelta = syncInfo.server - now + latency;
+      console.log(targetSyncDelta);
+    });
+    
     const match = /secret=(.+)/.exec(document.cookie);
     
     if (match) {
@@ -66,6 +77,8 @@ function init(socket) {
    
   socket.on('disconnect', () => {
     console.log('Disconnected');
+    
+    clearInterval(timeSyncInterval);
   });
   
   const faviconLinkEl = document.querySelector('#favicon'); 
@@ -138,9 +151,21 @@ function init(socket) {
   }
     
   const pixels = new Uint8Array(ROWS * COLS);
+  
+  let epoch = null;
     
   function drawFront(t) {
     requestAnimationFrame(drawFront);
+
+    if (epoch === null) {
+      epoch = t;
+    }
+    
+    const elapsed = t - epoch;
+    
+    syncDelta += (targetSyncDelta - syncDelta) / 10;
+    
+    const syncT = elapsed + syncDelta; 
 
     pixels.fill(0);
 
@@ -152,7 +177,7 @@ function init(socket) {
 
     if (renderFn) {
       try {
-        renderFn(pixels, t / 1000);
+        renderFn(pixels, syncT / 1000);
       } catch (error) {
         renderFn = null;
         errorEl.innerHTML = `Runtime error: ${error.message}`;

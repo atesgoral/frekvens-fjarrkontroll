@@ -16,6 +16,11 @@ const ui = { socket: null };
 io.on('connection', (socket) => {
   console.log('Client connected');
   
+  socket.on('sync', (syncInfo) => {
+    syncInfo.server = Date.now();
+    socket.emit('sync', syncInfo);
+  });
+  
   socket.on('identify', (secret) => {
     if (secret === process.env.FREKVENS_CLIENT_SECRET) {
       console.log('FREKVENS authorized');
