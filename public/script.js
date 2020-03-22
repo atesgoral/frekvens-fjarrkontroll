@@ -55,9 +55,9 @@ function init(socket) {
   const frontEl = document.querySelector('#front');
   const maskEl = document.createElement('canvas');
   const faviconEl = document.createElement('canvas');
+     
+  document.body.appendChild(maskEl);
   
-  document.body.appendChild(maskEl)
-    
   let renderFn = DEFAULT_RENDER_FN;
     
   scriptEl.value = extractSource(DEFAULT_RENDER_FN);
@@ -181,7 +181,9 @@ function init(socket) {
 //     frontCtx.fillStyle = '#111';
 //     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
     
-    frontCtx.drawImage(maskEl, 0, 0);
+    frontCtx.globalCompositeOperation = 'screen';
+    frontCtx.drawImage(maskEl, 0, 0, CUBE_WIDTH, CUBE_HEIGHT);
+    frontCtx.globalCompositeOperation = 'source-over';
     
     faviconLinkEl.href = faviconEl.toDataURL('image/png');
   }
