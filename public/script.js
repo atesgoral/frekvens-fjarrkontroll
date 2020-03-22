@@ -58,7 +58,6 @@ function init(socket) {
       const latency = (now - syncInfo.client) / 2;
 
       targetSyncDelta = syncInfo.server - now + latency;
-      console.log(targetSyncDelta);
     });
     
     const match = /secret=(.+)/.exec(document.cookie);
@@ -165,7 +164,7 @@ function init(socket) {
     
     syncDelta += (targetSyncDelta - syncDelta) / 10;
     
-    const syncT = elapsed + syncDelta; 
+    const syncT = Date.now() + syncDelta; 
 
     pixels.fill(0);
 
