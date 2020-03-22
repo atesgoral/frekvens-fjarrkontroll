@@ -43,12 +43,23 @@ function init(socket) {
   
   const COLS = 16;
   const ROWS = 16;
+  const PIXEL_RADIUS = 1;
+  const PIXEL_SPACING = 1;
+  const PIXEL_OC = 2 * PIXEL_RADIUS + PIXEL_SPACING;
+  const GUTTER = 2;
+  const CUBE_WIDTH = GUTTER * 2
+    + PIXEL_RADIUS * 2 * COLS
+    + PIXEL_SPACING * (COLS - 1);
+  const CUBE_HEIGHT = GUTTER * 2
+    + PIXEL_RADIUS * 2 * ROWS
+    + PIXEL_SPACING * (ROWS - 1);
   
-  const scale = frontEl.width / (3 + 7 / 8);
+  frontCtx.scale(
+    frontEl.width / CUBE_WIDTH,
+    frontEl.height / CUBE_HEIGHT
+  );
   
-  frontCtx.scale(scale, scale);
-  
-  const pixels = new Uint8Array(16 * 16);
+  const pixels = new Uint8Array(ROWS * COLS);
   
   function drawFront(t) {
     requestAnimationFrame(drawFront);
@@ -56,22 +67,23 @@ function init(socket) {
     pixels.fill(0);
 
     frontCtx.fillStyle = '#111';
-    frontCtx.fillRect(0, 0, (3 + 7 / 8), (3 + 7 / 8));
+    frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
     
     renderFn(pixels, t / 1000);
     
-    for (let row = 0; row < 16; row++) {
-      for (let col = 0; col < 16; col++) {
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
         
-        frontCtx.fillStyle = pixels[row * 16 + col]
+        frontCtx.fillStyle = pixels[row * COLS + col]
           ? '#fff'
-          :'#222';
+          : '#222';
         
         frontCtx.beginPath();
         frontCtx.arc(
-          (col + 1) * 3 / 16,
-          (row + 1) * 3 / 16,
-          1 / 16, 0,
+          GUTTER + col * PIXEL_OC,
+          GUTTER + row * PIXEL_OC,
+          PIXEL_RADIUS,
+          0,
           Math.PI * 2
         );
         frontCtx.fill();
