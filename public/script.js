@@ -147,16 +147,17 @@ function init(socket) {
 
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
-          levels[row * COLS + col] = pixels[row * COLS + col];
+          levels[row * COLS + col] = pixels[row * COLS + col] * 1;
         }
       }
       
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
-
-          frontCtx.fillStyle = `hsl(0, 0, ${pixels[row * COLS + col]}pixels[row * COLS + col]
-            ? '#fff'
-            : '#222';
+          frontCtx.fillStyle = `hsl(
+            0,
+            0%,
+            ${(levels[row * COLS + col] * 0.9 + 0.1) * 100}%
+          `;
           
           frontCtx.fillRect(
             GUTTER + col * PIXEL_OC,
