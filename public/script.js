@@ -22,8 +22,9 @@ function init(socket) {
     console.log('Disconnected');
   });
   
+  const faviconLinkEl = document.querySelector('#favicon'); 
   const scriptEl = document.querySelector('#script');
-  
+    
   const renderFn = new Function([ 'pixels', 't' ], scriptEl.value);
   
   scriptEl.addEventListener('change', () => {
@@ -57,6 +58,13 @@ function init(socket) {
     frontEl.height / CUBE_HEIGHT
   );
 
+  const faviconEl = document.createElement('canvas');
+  
+  faviconEl.width = COLS;
+  faviconEl.height = ROWS;
+  
+  const faviconCtx = faviconEl.getContext('2d');
+  
   const pixels = new Uint8Array(ROWS * COLS);
   
   function drawFront(t) {
@@ -66,6 +74,9 @@ function init(socket) {
 
     frontCtx.fillStyle = '#111';
     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
+
+    faviconCtx.fillStyle = '#111';
+    faviconCtx.fillRect(0, 0, COLS, ROWS);
     
     renderFn(pixels, t / 1000);
         
@@ -85,9 +96,13 @@ function init(socket) {
           Math.PI * 2
         );
         frontCtx.fill();
+        
+        faviconCtx.fillStyle = frontCtx.fillStyle;
+        faviconCtx.fillRect(col, row, 1, 1);
       }
     }
     
+    faviconLinkEl.href = faviconEl.toDataURL('image/png');
   }
   
   requestAnimationFrame(drawFront);
