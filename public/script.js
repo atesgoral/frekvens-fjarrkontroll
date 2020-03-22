@@ -18,6 +18,22 @@ const DEFAULT_RENDER_FN = function (pixels, t) {
   pixels[y * 16 + x] = 1;
 };
 
+const DIFFUSE_DISTANCE = 2;
+const DIFFUSE_DIAMETER = DIFFUSE_DISTANCE * 2 + 1;
+const diffuseFilter = Array(DIFFUSE_DIAMETER ** 2).fill(0);
+
+for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
+  for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
+    const d = Math.sqrt(
+      (dx - DIFFUSE_DISTANCE) ** 2 + (dy - DIFFUSE_DISTANCE) ** 2
+    );
+    const falloff = d / DIFFUSE_DISTANCE;
+    diffuseFilter[dy * DIFFUSE_DIAMETER + dx] = 1 - falloff;
+  }
+}
+
+console.log(diffuseFilter);
+
 function extractSource(fn) {
   return fn
     .toString()
@@ -121,21 +137,7 @@ function init(socket) {
   }
     
   const pixels = new Uint8Array(ROWS * COLS);
-  
-  const DIFFUSE_DISTANCE = 2;
-  const DIFFUSE_DIAMETER = DIFFUSE_DISTANCE * 2 + 1;
-  const diffuseFilter = Array(DIFFUSE_DIAMETER ** 2).fill(0);
-  
-  for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
-    for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
-      const d = Math.sqrt(
-        (dx - DIFFUSE_DISTANCE) ** 2 + (dy - DIFFUSE_DISTANCE) ** 2
-      );
-      const falloff = d / DIFFUSE_DISTANCE;
-      diffuseFilter[dy * DIFFUSE_DIAMETER + dx] = 1 - falloff;
-    }
-  }
-  
+    
   function drawFront(t) {
     requestAnimationFrame(drawFront);
 
@@ -159,30 +161,38 @@ function init(socket) {
     if (renderFn) {
       const levels = Array(16 * 16).fill(0);
 
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 0; col < COLS; col++) {
-          // levels[row * COLS + col] = pixels[row * COLS + col];
-          for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
-            const y = row + dy;
-            
-            if (y < 0 || y >= ROWS) {
-              continue;
-            }
-            
-            for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
-              const x = col + dx;
-              
-              if (x < 0 || x >= COLS) {
-                continue;
-              }
-              
-              const level = levels[y * COLS + x];
-              levels[y * COLS + x] = level +
-                pixels[row * COLS + col] * diffuseFilter[dy * DIFFUSE_DIAMETER + dx];
-            }
-          }
+      for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
+        for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
+          levels[dy * COLS + dx] = diffuseFilter[dy * DIFFUSE_DIAMETER + dx];
         }
       }
+      
+//       for (let row = 0; row < ROWS; row++) {
+//         for (let col = 0; col < COLS; col++) {
+//           // levels[row * COLS + col] = pixels[row * COLS + col];
+//           for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
+//             const y = row + dy;
+            
+//             if (y < 0 || y >= ROWS) {
+//               continue;
+//             }
+            
+//             for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
+//               const x = col + dx;
+              
+//               if (x < 0 || x >= COLS) {
+//                 continue;
+//               }
+              
+//               levels[y * COLS + x] = Math.min(
+//                 1,
+//                 levels[y * COLS + x]
+//                   + pixels[row * COLS + col] * diffuseFilter[dy * DIFFUSE_DIAMETER + dx]
+//               );
+//             }
+//           }
+//         }
+      //}
       
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
