@@ -27,12 +27,10 @@ for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
     const d = Math.sqrt(
       (dx - DIFFUSE_DISTANCE) ** 2 + (dy - DIFFUSE_DISTANCE) ** 2
     );
-    const falloff = d / DIFFUSE_DISTANCE;
+    const falloff = (d / (DIFFUSE_DISTANCE + 1)) ** .4;
     diffuseFilter[dy * DIFFUSE_DIAMETER + dx] = 1 - falloff;
   }
 }
-
-console.log(diffuseFilter);
 
 function extractSource(fn) {
   return fn
@@ -72,8 +70,6 @@ function init(socket) {
   const maskEl = document.createElement('canvas');
   const faviconEl = document.createElement('canvas');
      
-  document.body.appendChild(maskEl);
-  
   let renderFn = DEFAULT_RENDER_FN;
     
   scriptEl.value = extractSource(DEFAULT_RENDER_FN);
@@ -161,38 +157,38 @@ function init(socket) {
     if (renderFn) {
       const levels = Array(16 * 16).fill(0);
 
-      for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
-        for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
-          levels[dy * COLS + dx] = diffuseFilter[dy * DIFFUSE_DIAMETER + dx];
+      // for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
+      //   for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
+      //     levels[dy * COLS + dx] = diffuseFilter[dy * DIFFUSE_DIAMETER + dx];
+      //   }
+      // }
+      
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+          // levels[row * COLS + col] = pixels[row * COLS + col];
+          for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
+            const y = row + dy - DIFFUSE_DISTANCE;
+            
+            if (y < 0 || y >= ROWS) {
+              continue;
+            }
+            
+            for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
+              const x = col + dx - DIFFUSE_DISTANCE;
+              
+              if (x < 0 || x >= COLS) {
+                continue;
+              }
+              
+              levels[y * COLS + x] = Math.min(
+                1,
+                levels[y * COLS + x]
+                  + pixels[row * COLS + col] * diffuseFilter[dy * DIFFUSE_DIAMETER + dx]
+              );
+            }
+          }
         }
       }
-      
-//       for (let row = 0; row < ROWS; row++) {
-//         for (let col = 0; col < COLS; col++) {
-//           // levels[row * COLS + col] = pixels[row * COLS + col];
-//           for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
-//             const y = row + dy;
-            
-//             if (y < 0 || y >= ROWS) {
-//               continue;
-//             }
-            
-//             for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
-//               const x = col + dx;
-              
-//               if (x < 0 || x >= COLS) {
-//                 continue;
-//               }
-              
-//               levels[y * COLS + x] = Math.min(
-//                 1,
-//                 levels[y * COLS + x]
-//                   + pixels[row * COLS + col] * diffuseFilter[dy * DIFFUSE_DIAMETER + dx]
-//               );
-//             }
-//           }
-//         }
-      //}
       
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
