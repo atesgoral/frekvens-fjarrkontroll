@@ -12,10 +12,15 @@ const CUBE_HEIGHT = GUTTER * 2
   + PIXEL_SPACING * (ROWS - 1);
 
 const DEFAULT_RENDER_FN = function (pixels, t) {
-  const x = Math.cos(t) * 8 + 8 | 0;
-  const y = Math.sin(t) * 8 + 8 | 0;
+  const x1 = Math.cos(t * 5) * 8 + 8 | 0;
+  const y1 = Math.sin(t * 7) * 8 + 8 | 0;
 
-  pixels[y * 16 + x] = 1;
+  pixels[y1 * 16 + x1] = 1;
+
+  const x2 = Math.cos(t * 2) * 8 + 8 | 0;
+  const y2 = Math.sin(t * 6) * 8 + 8 | 0;
+
+  pixels[y2 * 16 + x2] = 1;
 };
 
 const DIFFUSE_DISTANCE = 2;
@@ -151,16 +156,16 @@ function init(socket) {
     
   const pixels = new Uint8Array(ROWS * COLS);
   
-  let epoch = null;
+  // let epoch = null;
     
   function drawFront(t) {
     requestAnimationFrame(drawFront);
 
-    if (epoch === null) {
-      epoch = t;
-    }
+    // if (epoch === null) {
+    //   epoch = t;
+    // }
     
-    const elapsed = t - epoch;
+    // const elapsed = t - epoch;
     
     syncDelta += (targetSyncDelta - syncDelta) / 10;
     
@@ -241,7 +246,7 @@ function init(socket) {
     frontCtx.globalCompositeOperation = 'multiply';
     frontCtx.drawImage(maskEl, 0, 0, CUBE_WIDTH, CUBE_HEIGHT);
     frontCtx.globalCompositeOperation = 'screen';
-    frontCtx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+    frontCtx.fillStyle = 'rgba(255, 255, 255, 0.05)';
     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
     frontCtx.globalCompositeOperation = 'source-over';
     

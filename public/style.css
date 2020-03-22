@@ -32,11 +32,12 @@ section {
 
 #code textarea {
   flex-grow: 1;
-  background: #222;
-  color: #eee;
+  background: #111;
+  color: #ddd;
   border: none;
   font-family: monospace;
   font-size: 2vw;
+  box-sizing: border-box;
   padding: 1vw;
   height: 25vw;
 }
