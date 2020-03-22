@@ -178,7 +178,7 @@ function init(socket) {
 //     frontCtx.fillStyle = '#111';
 //     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
     
-    frontCtx.drawImage(maskEl, 0, 0);
+    //frontCtx.drawImage(maskEl, 0, 0);
     
     faviconLinkEl.href = faviconEl.toDataURL('image/png');
   }
