@@ -145,6 +145,14 @@ function init(socket) {
       }
     }
     
+//     const region = new Path2D();
+//     region.rect(80, 10, 20, 130);
+//     region.rect(40, 50, 100, 50);
+//     frontCtx.clip(region, 'evenodd');
+
+//     frontCtx.fillStyle = '#111';
+//     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
+    
     faviconLinkEl.href = faviconEl.toDataURL('image/png');
   }
   
