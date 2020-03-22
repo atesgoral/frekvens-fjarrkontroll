@@ -46,7 +46,7 @@ function init(socket) {
   const ROWS = 16;
   const PIXEL_RADIUS = 1;
   const PIXEL_SPACING = 1;
-  const PIXEL_OC = 2 * PIXEL_RADIUS + PIXEL_SPACING;
+  const PIXEL_OC = 2 * PIXEL_RADIUS + PIXEL_SPACING; // center-to-center
   const GUTTER = 2;
   const CUBE_WIDTH = GUTTER * 2
     + PIXEL_RADIUS * 2 * COLS
@@ -91,8 +91,8 @@ function init(socket) {
         
         frontCtx.beginPath();
         frontCtx.arc(
-          GUTTER + col * PIXEL_OC,
-          GUTTER + row * PIXEL_OC,
+          GUTTER + PIXEL_RADIUS + col * PIXEL_OC,
+          GUTTER + PIXEL_RADIUS + row * PIXEL_OC,
           PIXEL_RADIUS,
           0,
           Math.PI * 2
