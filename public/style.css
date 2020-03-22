@@ -44,6 +44,10 @@ section {
   padding: 1rem;
 }
 
+#code textarea:focus {
+  outline: 1px solid #eee;
+}
+
 #error {
   margin: 2rem auto 0;
   width: 50vw;
