@@ -122,6 +122,18 @@ function init(socket) {
     
   const pixels = new Uint8Array(ROWS * COLS);
   
+  const DIFFUSE_DISTANCE = 2;
+  const DIFFUSE_DIAMETER = DIFFUSE_DISTANCE * 2 + 1;
+  const diffuseFilter = Array(DIFFUSE_DIAMETER ** 2).fill(0);
+  
+  for (let y = 0; y < DIFFUSE_DIAMETER; y++) {
+    for (let x = 0; x < DIFFUSE_DIAMETER; x++) {
+      const d = Math.sqrt(
+        (x - DIFFUSE_DISTANCE) ** 2 + (y - DIFFUSE_DISTANCE) ** 2
+      );
+    }
+  }
+  
   function drawFront(t) {
     requestAnimationFrame(drawFront);
 
@@ -147,7 +159,7 @@ function init(socket) {
 
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
-          levels[row * COLS + col] = pixels[row * COLS + col] * 1;
+          levels[row * COLS + col] = pixels[row * COLS + col];
         }
       }
       
