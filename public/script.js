@@ -101,7 +101,7 @@ function init(socket) {
     maskEl.height / CUBE_HEIGHT
   );
 
-  maskCtx.fillStyle = '#111';
+  maskCtx.fillStyle = '#000';
   maskCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
 
   maskCtx.fillStyle = '#fff';
