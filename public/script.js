@@ -154,60 +154,58 @@ function init(socket) {
       }
     }
     
-    if (renderFn) {
-      const levels = Array(16 * 16).fill(0);
+    const levels = Array(16 * 16).fill(0);
 
-      // for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
-      //   for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
-      //     levels[dy * COLS + dx] = diffuseFilter[dy * DIFFUSE_DIAMETER + dx];
-      //   }
-      // }
-      
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 0; col < COLS; col++) {
-          // levels[row * COLS + col] = pixels[row * COLS + col];
-          for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
-            const y = row + dy - DIFFUSE_DISTANCE;
-            
-            if (y < 0 || y >= ROWS) {
+    // for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
+    //   for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
+    //     levels[dy * COLS + dx] = diffuseFilter[dy * DIFFUSE_DIAMETER + dx];
+    //   }
+    // }
+
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        // levels[row * COLS + col] = pixels[row * COLS + col];
+        for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
+          const y = row + dy - DIFFUSE_DISTANCE;
+
+          if (y < 0 || y >= ROWS) {
+            continue;
+          }
+
+          for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
+            const x = col + dx - DIFFUSE_DISTANCE;
+
+            if (x < 0 || x >= COLS) {
               continue;
             }
-            
-            for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
-              const x = col + dx - DIFFUSE_DISTANCE;
-              
-              if (x < 0 || x >= COLS) {
-                continue;
-              }
-              
-              levels[y * COLS + x] = Math.min(
-                1,
-                levels[y * COLS + x]
-                  + pixels[row * COLS + col] * diffuseFilter[dy * DIFFUSE_DIAMETER + dx]
-              );
-            }
+
+            levels[y * COLS + x] = Math.min(
+              1,
+              levels[y * COLS + x]
+                + pixels[row * COLS + col] * diffuseFilter[dy * DIFFUSE_DIAMETER + dx]
+            );
           }
         }
       }
-      
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 0; col < COLS; col++) {
-          frontCtx.fillStyle = `hsl(
-            0,
-            0%,
-            ${(levels[row * COLS + col] * 0.9 + 0.1) * 100}%
-          `;
-          
-          frontCtx.fillRect(
-            GUTTER + col * PIXEL_OC,
-            GUTTER + row * PIXEL_OC,
-            PIXEL_RADIUS * 2,
-            PIXEL_RADIUS * 2
-          );
+    }
 
-          faviconCtx.fillStyle = frontCtx.fillStyle;
-          faviconCtx.fillRect(col, row, 1, 1);
-        }
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        frontCtx.fillStyle = `hsl(
+          0,
+          0%,
+          ${(levels[row * COLS + col] * 0.9 + 0.1) * 100}%
+        `;
+
+        frontCtx.fillRect(
+          GUTTER + col * PIXEL_OC,
+          GUTTER + row * PIXEL_OC,
+          PIXEL_RADIUS * 2,
+          PIXEL_RADIUS * 2
+        );
+
+        faviconCtx.fillStyle = frontCtx.fillStyle;
+        faviconCtx.fillRect(col, row, 1, 1);
       }
     }
        
