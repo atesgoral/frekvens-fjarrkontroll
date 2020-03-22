@@ -149,39 +149,21 @@ function init(socket) {
           frontCtx.fillStyle = pixels[row * COLS + col]
             ? '#fff'
             : '#222';
-
-          frontCtx.beginPath();
-          frontCtx.arc(
-            GUTTER + PIXEL_RADIUS + col * PIXEL_OC,
-            GUTTER + PIXEL_RADIUS + row * PIXEL_OC,
-            PIXEL_RADIUS,
-            0,
-            Math.PI * 2
-          );
-          frontCtx.fill();
           
-          // frontCtx.fillRect(
-          //   GUTTER + col * PIXEL_OC,
-          //   GUTTER + row * PIXEL_OC,
-          //   PIXEL_RADIUS * 2,
-          //   PIXEL_RADIUS * 2
-          // );
+          frontCtx.fillRect(
+            GUTTER + col * PIXEL_OC,
+            GUTTER + row * PIXEL_OC,
+            PIXEL_RADIUS * 2,
+            PIXEL_RADIUS * 2
+          );
 
           faviconCtx.fillStyle = frontCtx.fillStyle;
           faviconCtx.fillRect(col, row, 1, 1);
         }
       }
     }
-    
-//     const region = new Path2D();
-//     region.rect(80, 10, 20, 130);
-//     region.rect(40, 50, 100, 50);
-//     frontCtx.clip(region, 'evenodd');
-
-//     frontCtx.fillStyle = '#111';
-//     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
-    
-    frontCtx.globalCompositeOperation = 'screen';
+       
+    frontCtx.globalCompositeOperation = 'multiply';
     frontCtx.drawImage(maskEl, 0, 0, CUBE_WIDTH, CUBE_HEIGHT);
     frontCtx.globalCompositeOperation = 'source-over';
     
