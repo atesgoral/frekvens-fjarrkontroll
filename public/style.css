@@ -43,3 +43,7 @@ section {
   font-size: 125%;
   padding: 1rem;
 }
+
+#error {
+  color: #fa0;
+}

@@ -2,13 +2,16 @@ const defaultRenderFn = function (pixels, t) {
   const x = Math.cos(t) * 8 + 8 | 0;
   const y = Math.sin(t) * 8 + 8 | 0;
 
-  pixels[y * 16 + x] = 1;        
+  pixels[y * 16 + x] = 1;
 };
 
 function extractSource(fn) {
-  const match = /^function+(?:.+?)+\{(.+?)\}/.exec(fn.toString());
-  
-  return match && match[1];
+  return fn
+    .toString()
+    .split('\n')
+    .slice(1, -1)
+    .map((line) => line.slice(2))
+    .join('\n');
 }
   
 function init(socket) {
