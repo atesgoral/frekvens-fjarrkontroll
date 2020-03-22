@@ -16,15 +16,24 @@ function init(socket) {
   
   const faviconLinkEl = document.querySelector('#favicon'); 
   const scriptEl = document.querySelector('#script');
+  const errorEl = document.querySelector('#error');
     
   let renderFn = new Function([ 'pixels', 't' ], scriptEl.value);
   
   scriptEl.addEventListener('change', () => {
     const script = scriptEl.value;
     
-    renderFn = new Function([ 'pixels', 't' ], script);
+    errorEl.innerHTML = '';
     
-    socket.emit('script', script);
+    try {
+      renderFn = new Function([ 'pixels', 't' ], script);
+    } catch (error) {
+      renderFn = null;
+      errorEl.innerHTML = `Syntax error: ${error.message}`;
+      return;
+    }
+    
+    socket.emit('script', script);    
   });
   
   const frontEl = document.querySelector('#front');
