@@ -148,22 +148,22 @@ function init(socket) {
             ? '#fff'
             : '#222';
 
-          // frontCtx.beginPath();
-          // frontCtx.arc(
-          //   GUTTER + PIXEL_RADIUS + col * PIXEL_OC,
-          //   GUTTER + PIXEL_RADIUS + row * PIXEL_OC,
-          //   PIXEL_RADIUS,
-          //   0,
-          //   Math.PI * 2
-          // );
-          // frontCtx.fill();
-          
-          frontCtx.fillRect(
-            GUTTER + col * PIXEL_OC,
-            GUTTER + row * PIXEL_OC,
-            PIXEL_RADIUS * 2,
-            PIXEL_RADIUS * 2
+          frontCtx.beginPath();
+          frontCtx.arc(
+            GUTTER + PIXEL_RADIUS + col * PIXEL_OC,
+            GUTTER + PIXEL_RADIUS + row * PIXEL_OC,
+            PIXEL_RADIUS,
+            0,
+            Math.PI * 2
           );
+          frontCtx.fill();
+          
+          // frontCtx.fillRect(
+          //   GUTTER + col * PIXEL_OC,
+          //   GUTTER + row * PIXEL_OC,
+          //   PIXEL_RADIUS * 2,
+          //   PIXEL_RADIUS * 2
+          // );
 
           faviconCtx.fillStyle = frontCtx.fillStyle;
           faviconCtx.fillRect(col, row, 1, 1);
