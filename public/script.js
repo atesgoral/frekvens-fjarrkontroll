@@ -36,9 +36,7 @@ function init(socket) {
   
   frontEl.width = frontEl.clientWidth;
   frontEl.height = frontEl.clientHeight;
-  
-  console.log(frontEl.clientWidth, frontEl.clientHeight);
-  
+    
   const frontCtx = frontEl.getContext('2d');
   
   const COLS = 16;
@@ -58,7 +56,7 @@ function init(socket) {
     frontEl.width / CUBE_WIDTH,
     frontEl.height / CUBE_HEIGHT
   );
-  
+
   const pixels = new Uint8Array(ROWS * COLS);
   
   function drawFront(t) {
@@ -70,7 +68,7 @@ function init(socket) {
     frontCtx.fillRect(0, 0, CUBE_WIDTH, CUBE_HEIGHT);
     
     renderFn(pixels, t / 1000);
-    
+        
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS; col++) {
         
