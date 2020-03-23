@@ -8,6 +8,18 @@ dotenv.config();
 
 const app = express();
 
+app.post('/deployhook', (request, response) => {
+  console.log('Received deploy hook');
+
+  if (request.get('X-Hub-Signature') !== process.env.DEPLOY_HOOK_SECRET) {
+    console.log('Unauthorized');
+    response.status(403).end();
+  } else {
+    console.log('Updating in the background');
+    response.status(204).end();
+  }
+});
+
 app.use(express.static('public'));
 
 const server = http.createServer(app);
