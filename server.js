@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
   }
   
   socket.on('sync', (syncInfo) => {
-    syncInfo.server = Date.now() + syncDelta;
+    syncInfo.server = Date.now();
     syncInfo.frekvens = {
       latency,
       syncDelta

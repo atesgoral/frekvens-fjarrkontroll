@@ -12,12 +12,12 @@ const CUBE_HEIGHT = GUTTER * 2
   + PIXEL_SPACING * (ROWS - 1);
 
 const DEFAULT_RENDER_FN = function (pixels, t) {
-  const x1 = Math.cos(t * 2) * 8 + 8 | 0;
-  const y1 = 8;
+  const x1 = Math.cos(t * 3) * 8 + 8 | 0;
+  const y1 = 4;
 
   pixels[y1 * 16 + x1] = 1;
 
-  const x2 = 8;
+  const x2 = 4;
   const y2 = Math.sin(t * 2) * 8 + 8 | 0;
 
   pixels[y2 * 16 + x2] = 1;
@@ -81,6 +81,7 @@ function init(socket) {
       const latency = (now - syncInfo.client) / 2;
 
       targetSyncDelta = syncInfo.server - now + latency;
+      targetSyncDelta += syncInfo.frekvens.syncDelta;
       
       console.log('Sync:', latency, targetSyncDelta, syncInfo.frekvens.latency, syncInfo.frekvens.syncDelta);
     });
