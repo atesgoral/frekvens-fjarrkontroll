@@ -12,13 +12,13 @@ const CUBE_HEIGHT = GUTTER * 2
   + PIXEL_SPACING * (ROWS - 1);
 
 const DEFAULT_RENDER_FN = function (pixels, t) {
-  const x1 = Math.cos(t * 5) * 8 + 8 | 0;
-  const y1 = Math.sin(t * 7) * 8 + 8 | 0;
+  const x1 = Math.cos(t * 2) * 8 + 8 | 0;
+  const y1 = 8;
 
   pixels[y1 * 16 + x1] = 1;
 
-  const x2 = Math.cos(t * 2) * 8 + 8 | 0;
-  const y2 = Math.sin(t * 6) * 8 + 8 | 0;
+  const x2 = 8;
+  const y2 = Math.sin(t * 2) * 8 + 8 | 0;
 
   pixels[y2 * 16 + x2] = 1;
 };
@@ -37,8 +37,6 @@ for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
   }
 }
 
-console.log(diffuseFilter);
-
 function extractSource(fn) {
   return fn
     .toString()
@@ -47,12 +45,13 @@ function extractSource(fn) {
     .map((line) => line.slice(2))
     .join('\n');
 }
-  
+
 function init(socket) {
+  let renderFn = null;
   let timeSyncInterval = null;
   let syncDelta = 0;
   let targetSyncDelta = 0;
-  
+    
   socket.on('connect', () => {
     console.log('Connected');
   
@@ -65,6 +64,8 @@ function init(socket) {
       const latency = (now - syncInfo.client) / 2;
 
       targetSyncDelta = syncInfo.server - now + latency;
+      
+      console.log('Sync:', latency, targetSyncDelta, syncInfo.frekvens.latency, syncInfo.frekvens.syncDelta);
     });
     
     const match = /secret=(.+)/.exec(document.cookie);
@@ -80,6 +81,10 @@ function init(socket) {
       });
     }
   });
+  
+  socket.on('script', (script) => {
+    
+  });
    
   socket.on('disconnect', () => {
     console.log('Disconnected');
@@ -94,14 +99,32 @@ function init(socket) {
   const maskEl = document.createElement('canvas');
   const faviconEl = document.createElement('canvas');
      
-  let renderFn = DEFAULT_RENDER_FN;
+  function applyScript(script) {
+    try {
+      renderFn = new Function([ 'pixels', 't' ], script);
+    } catch (error) {
+      renderFn = null;
+      errorEl.innerHTML = `Syntax error: ${error.message}`;
+      return;
+    }
     
-  scriptEl.value = extractSource(DEFAULT_RENDER_FN);
+    socket.emit('script', script);    
+  }
+  
+  
+
+  const defaultScript = extractSource(DEFAULT_RENDER_FN);
+  
+  scriptEl.value = defaultScript;
+  
+  applyScript(defaultScript);
   
   scriptEl.addEventListener('change', () => {
     const script = scriptEl.value;
     
     errorEl.innerHTML = '';
+    
+    applyScript(script);
     
     try {
       renderFn = new Function([ 'pixels', 't' ], script);

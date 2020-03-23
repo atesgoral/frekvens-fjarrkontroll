@@ -14,6 +14,7 @@ const frekvens = { socket: null };
 const ui = { socket: null };
 
 let timeSyncInterval = null;
+let latency = 0;
 let syncDelta = 0;
 
 io.on('connection', (socket) => {
@@ -21,6 +22,10 @@ io.on('connection', (socket) => {
   
   socket.on('sync', (syncInfo) => {
     syncInfo.server = Date.now() + syncDelta;
+    syncInfo.frekvens = {
+      latency,
+      syncDelta
+    };
     socket.emit('syncResponse', syncInfo);
   });
   
@@ -36,9 +41,11 @@ io.on('connection', (socket) => {
       
       socket.on('syncResponse', (syncInfo) => {
         const now = Date.now();
-        const latency = (now - syncInfo.client) / 2;
+        latency = (now - syncInfo.client) / 2;
 
         syncDelta = syncInfo.server - now + latency;
+        
+        console.log('Sync response from FREKVENS:', latency, syncDelta);
       });      
       
       socket.on('disconnect', () => {
