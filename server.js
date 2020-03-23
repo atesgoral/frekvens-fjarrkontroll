@@ -13,12 +13,15 @@ const io = socketIo(server);
 const frekvens = { socket: null };
 const ui = { socket: null };
 
+let timeSyncInterval = null;
+let syncDelta = 0;
+
 io.on('connection', (socket) => {
   console.log('Client connected');
   
   socket.on('sync', (syncInfo) => {
-    syncInfo.server = Date.now();
-    socket.emit('sync', syncInfo);
+    syncInfo.server = Date.now() + syncDelta;
+    socket.emit('syncResponse', syncInfo);
   });
   
   socket.on('identify', (secret) => {
@@ -27,8 +30,20 @@ io.on('connection', (socket) => {
       
       frekvens.socket = socket;     
      
+      timeSyncInterval = setInterval(() => {
+        socket.emit('sync', { client: Date.now() });  
+      }, 1000);
+      
+      socket.on('syncResponse', (syncInfo) => {
+        const now = Date.now();
+        const latency = (now - syncInfo.client) / 2;
+
+        syncDelta = syncInfo.server - now + latency;
+      });      
+      
       socket.on('disconnect', () => {
         frekvens.socket = null;
+        clearInterval(timeSyncInterval);    
       });      
     } else if (secret === process.env.UI_CLIENT_SECRET) {
       console.log('UI authorized');

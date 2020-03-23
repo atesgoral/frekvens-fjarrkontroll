@@ -60,7 +60,7 @@ function init(socket) {
       socket.emit('sync', { client: Date.now() });  
     }, 1000);
 
-    socket.on('sync', (syncInfo) => {
+    socket.on('syncResponse', (syncInfo) => {
       const now = Date.now();
       const latency = (now - syncInfo.client) / 2;
 
