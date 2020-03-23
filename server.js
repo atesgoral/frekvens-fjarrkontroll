@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
       socket.emit('drive');
       
       socket.on('script', (script) => {
-        frekvens.socket && frekvens.socket.emit('script', script);
+        socket.broadcast.emit('script', script);
       });
 
       socket.on('disconnect', () => {
