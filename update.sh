@@ -1,1 +1,3 @@
-git fetch origin master && git reset --hard origin/master && refresh
+git fetch origin master
+git merge --ff-only origin/master
+refresh
