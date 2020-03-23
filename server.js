@@ -1,4 +1,5 @@
 const http = require('http');
+const { spawn } = require('child_process');
 
 const express = require('express');
 const socketIo = require('socket.io');
@@ -15,7 +16,29 @@ app.post('/deployhook', (request, response) => {
     console.log('Unauthorized');
     response.status(403).end();
   } else {
-    console.log('Updating in the background');
+    if (process.env.ENVIRONMENT === 'production') {
+      console.log('Updating in the background');
+
+      const child = spawn('./update.sh');
+
+      child.stdout.setEncoding('utf8');
+      child.stderr.setEncoding('utf8');
+
+      child.stdout.on('data', (chunk) => {
+        console.log(chunk);
+      });
+
+      child.stderr.on('data', (chunk) => {
+        console.error(chunk);
+      });
+
+      child.on('close', (code) => {
+        console.log(`Child process exited with code ${code}`);
+      });
+    } else {
+      console.log('Not doing anything')
+    }
+
     response.status(204).end();
   }
 });
