@@ -21,11 +21,11 @@ let overrideScript = null;
 
 io.on('connection', (socket) => {
   console.log('Client connected');
-  
+
   if (overrideScript) {
     socket.emit('script', overrideScript);
   }
-  
+
   socket.on('sync', (syncInfo) => {
     syncInfo.server = Date.now();
     syncInfo.frekvens = {
@@ -34,37 +34,37 @@ io.on('connection', (socket) => {
     };
     socket.emit('syncResponse', syncInfo);
   });
-  
+
   socket.on('identify', (secret) => {
     if (secret === process.env.FREKVENS_CLIENT_SECRET) {
       console.log('FREKVENS authorized');
-      
-      frekvens.socket = socket;     
-     
+
+      frekvens.socket = socket;
+
       timeSyncInterval = setInterval(() => {
-        socket.emit('sync', { client: Date.now() });  
+        socket.emit('sync', { client: Date.now() });
       }, 1000);
-      
+
       socket.on('syncResponse', (syncInfo) => {
         const now = Date.now();
         latency = (now - syncInfo.client) / 2;
 
         syncDelta = syncInfo.server - now + latency;
-        
+
         console.log('Sync response from FREKVENS:', latency, syncDelta);
-      });      
-      
+      });
+
       socket.on('disconnect', () => {
         frekvens.socket = null;
-        clearInterval(timeSyncInterval);    
-      });      
+        clearInterval(timeSyncInterval);
+      });
     } else if (secret === process.env.UI_CLIENT_SECRET) {
       console.log('UI authorized');
-      
+
       ui.socket = socket;
-      
+
       socket.emit('drive');
-      
+
       socket.on('script', (script) => {
         overrideScript = script;
         socket.broadcast.emit('script', script);
@@ -72,11 +72,11 @@ io.on('connection', (socket) => {
 
       socket.on('disconnect', () => {
         ui.socket = null;
-      });      
+      });
     } else {
       console.log('Unauthorized');
     }
-  });   
+  });
 });
 
 server.listen(process.env.PORT, () => {
