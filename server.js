@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const { spawn } = require('child_process');
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const socketIo = require('socket.io');
 const dotenv = require('dotenv');
 
@@ -10,40 +11,52 @@ dotenv.config();
 
 const app = express();
 
-app.post('/deployhook', (request, response) => {
+app.post('/deployhook', bodyParser.text({ type: 'application/json' }), (request, response) => {
   console.log('Received deploy hook');
 
-  const expectedHmac = crypto.createHmac('sha1', process.env.DEPLOY_HOOK_SECRET).digest('hex');
+  const expectedHmac = crypto
+    .createHmac('sha1', process.env.DEPLOY_HOOK_SECRET)
+    .update(request.body)
+    .digest('hex');
 
-  console.log(expectedHmac)
-  if (request.get('X-Hub-Signature') !== expectedHmac) {
-    console.log('Unauthorized');
-    response.status(403).end();
-  } else {
-    if (process.env.ENVIRONMENT === 'production') {
-      console.log('Updating in the background');
+  const signature = request.get('X-Hub-Signature');
+  const match = /^sha1=(.+)$/.exec(signature);
 
-      const child = spawn('./update.sh');
+  if (match) {
+    const hmac = match[1];
 
-      child.stdout.setEncoding('utf8');
-      child.stderr.setEncoding('utf8');
-
-      child.stdout.on('data', (chunk) => {
-        console.log(chunk);
-      });
-
-      child.stderr.on('data', (chunk) => {
-        console.error(chunk);
-      });
-
-      child.on('close', (code) => {
-        console.log(`Child process exited with code ${code}`);
-      });
+    if (hmac !== expectedHmac) {
+      console.log('Unauthorized');
+      response.status(403).end();
     } else {
-      console.log('Not doing anything')
-    }
+      if (process.env.ENVIRONMENT === 'production') {
+        console.log('Updating in the background');
 
-    response.status(204).end();
+        const child = spawn('./update.sh');
+
+        child.stdout.setEncoding('utf8');
+        child.stderr.setEncoding('utf8');
+
+        child.stdout.on('data', (chunk) => {
+          console.log(chunk);
+        });
+
+        child.stderr.on('data', (chunk) => {
+          console.error(chunk);
+        });
+
+        child.on('close', (code) => {
+          console.log(`Child process exited with code ${code}`);
+        });
+      } else {
+        console.log('Not doing anything')
+      }
+
+      response.status(204).end();
+    }
+  } else {
+    console.log('HMAC not found');
+    response.status(400).end();
   }
 });
 
