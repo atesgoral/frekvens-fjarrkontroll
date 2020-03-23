@@ -25,6 +25,10 @@ app.post('/deployhook', bodyParser.text({ type: 'application/json' }), (request,
   if (match) {
     const hmac = match[1];
 
+    console.log('body', request.body);
+    console.log('hmac', hmac);
+    console.log('hmac', expectedHmac);
+
     if (hmac !== expectedHmac) {
       console.log('Unauthorized');
       response.status(403).end();
