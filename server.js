@@ -17,8 +17,14 @@ let timeSyncInterval = null;
 let latency = 0;
 let syncDelta = 0;
 
+let overrideScript = null;
+
 io.on('connection', (socket) => {
   console.log('Client connected');
+  
+  if (overrideScript) {
+    socket.emit('script', overrideScript);
+  }
   
   socket.on('sync', (syncInfo) => {
     syncInfo.server = Date.now() + syncDelta;
@@ -60,6 +66,7 @@ io.on('connection', (socket) => {
       socket.emit('drive');
       
       socket.on('script', (script) => {
+        overrideScript = script;
         socket.broadcast.emit('script', script);
       });
 

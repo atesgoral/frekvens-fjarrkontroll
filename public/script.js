@@ -52,6 +52,23 @@ function init(socket) {
   let syncDelta = 0;
   let targetSyncDelta = 0;
     
+  function applyScript(script) {
+    try {
+      renderFn = new Function([ 'pixels', 't' ], script);
+    } catch (error) {
+      renderFn = null;
+      errorEl.innerHTML = `Syntax error: ${error.message}`;
+    }
+    
+    return true;
+  }
+  
+  function publishScript(script) {
+    if (applyScript(script)) {
+      socket.emit('script', script);    
+    }
+  }
+  
   socket.on('connect', () => {
     console.log('Connected');
   
@@ -83,7 +100,8 @@ function init(socket) {
   });
   
   socket.on('script', (script) => {
-    
+    scriptEl.value = script;
+    applyScript(script);    
   });
    
   socket.on('disconnect', () => {
@@ -99,25 +117,11 @@ function init(socket) {
   const maskEl = document.createElement('canvas');
   const faviconEl = document.createElement('canvas');
      
-  function applyScript(script) {
-    try {
-      renderFn = new Function([ 'pixels', 't' ], script);
-    } catch (error) {
-      renderFn = null;
-      errorEl.innerHTML = `Syntax error: ${error.message}`;
-      return;
-    }
-    
-    socket.emit('script', script);    
-  }
-  
-  
-
   const defaultScript = extractSource(DEFAULT_RENDER_FN);
   
   scriptEl.value = defaultScript;
   
-  applyScript(defaultScript);
+  publishScript(defaultScript);
   
   scriptEl.addEventListener('change', () => {
     const script = scriptEl.value;
