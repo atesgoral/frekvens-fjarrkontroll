@@ -2,6 +2,9 @@ const http = require('http');
 
 const express = require('express');
 const socketIo = require('socket.io');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
 
