@@ -1,4 +1,5 @@
 const http = require('http');
+const crypto = require('crypto');
 const { spawn } = require('child_process');
 
 const express = require('express');
@@ -12,7 +13,10 @@ const app = express();
 app.post('/deployhook', (request, response) => {
   console.log('Received deploy hook');
 
-  if (request.get('X-Hub-Signature') !== process.env.DEPLOY_HOOK_SECRET) {
+  const expectedHmac = crypto.createHmac('sha1', process.env.DEPLOY_HOOK_SECRET).digest('hex');
+
+  console.log(expectedHmac)
+  if (request.get('X-Hub-Signature') !== expectedHmac) {
     console.log('Unauthorized');
     response.status(403).end();
   } else {
