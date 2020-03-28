@@ -105,6 +105,14 @@ function init(socket) {
     applyScript(script);
   });
 
+  socket.on('buttonDown', (button) => {
+    console.log('Button down:', button);
+  });
+
+  socket.on('buttonUp', (button) => {
+    console.log('Button up:', button);
+  });
+
   socket.on('disconnect', () => {
     console.log('Disconnected');
 
