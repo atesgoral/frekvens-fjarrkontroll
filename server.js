@@ -109,6 +109,14 @@ io.on('connection', (socket) => {
         console.log('Sync response from FREKVENS:', latency, syncDelta);
       });
 
+      socket.on('buttonDown', (button) => {
+        socket.broadcast.emit('buttonDown', button);
+      });
+
+      socket.on('buttonUp', (button) => {
+        socket.broadcast.emit('buttonUp', button);
+      });
+
       socket.on('disconnect', () => {
         frekvens.socket = null;
         clearInterval(timeSyncInterval);
