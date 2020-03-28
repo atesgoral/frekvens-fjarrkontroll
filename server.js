@@ -110,10 +110,12 @@ io.on('connection', (socket) => {
       });
 
       socket.on('buttonDown', (button) => {
+        console.log('FREKVENS button down:', button);
         socket.broadcast.emit('buttonDown', button);
       });
 
       socket.on('buttonUp', (button) => {
+        console.log('FREKVENS button up:', button);
         socket.broadcast.emit('buttonUp', button);
       });
 
