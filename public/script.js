@@ -47,20 +47,23 @@ function extractSource(fn) {
 }
 
 function init(socket) {
-  let renderFn = null;
+  let currentScene = null;
   let timeSyncInterval = null;
   let syncDelta = 0;
   let targetSyncDelta = 0;
 
   function applyScript(script) {
     try {
-      renderFn = new Function([ 'pixels', 't' ], script);
+      currentScene = {
+        render: new Function([ 'pixels', 't', 'state' ], script),
+        state: {}
+      };
+
+      return true;
     } catch (error) {
-      renderFn = null;
+      currentScene = null;
       errorEl.innerHTML = `Syntax error: ${error.message}`;
     }
-
-    return true;
   }
 
   function publishScript(script) {
@@ -137,17 +140,7 @@ function init(socket) {
 
     errorEl.innerHTML = '';
 
-    applyScript(script);
-
-    try {
-      renderFn = new Function([ 'pixels', 't' ], script);
-    } catch (error) {
-      renderFn = null;
-      errorEl.innerHTML = `Syntax error: ${error.message}`;
-      return;
-    }
-
-    socket.emit('script', script);
+    publishScript(script);
   });
 
   frontEl.width = frontEl.clientWidth * 2;
@@ -194,16 +187,8 @@ function init(socket) {
 
   const pixels = new Uint8Array(ROWS * COLS);
 
-  // let epoch = null;
-
   function drawFront(t) {
     requestAnimationFrame(drawFront);
-
-    // if (epoch === null) {
-    //   epoch = t;
-    //}
-
-    // const elapsed = t - epoch;
 
     syncDelta += (targetSyncDelta - syncDelta) / 10;
 
@@ -217,22 +202,16 @@ function init(socket) {
     faviconCtx.fillStyle = '#000';
     faviconCtx.fillRect(0, 0, COLS, ROWS);
 
-    if (renderFn) {
+    if (currentScene) {
       try {
-        renderFn(pixels, syncT / 1000);
+        currentScene.render(pixels, syncT / 1000, currentScene.state);
       } catch (error) {
-        renderFn = null;
+        currentScene = null;
         errorEl.innerHTML = `Runtime error: ${error.message}`;
       }
     }
 
     const levels = Array(16 * 16).fill(0);
-
-    // for (let dy = 0; dy < DIFFUSE_DIAMETER; dy++) {
-    //   for (let dx = 0; dx < DIFFUSE_DIAMETER; dx++) {
-    //     levels[dy * COLS + dx] = diffuseFilter[dy * DIFFUSE_DIAMETER + dx];
-    //   }
-    // }
 
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS; col++) {
