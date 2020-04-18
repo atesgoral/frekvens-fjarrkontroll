@@ -97,7 +97,7 @@ function init(socket) {
       socket.emit('identify', secret);
 
       socket.on('drive', () => {
-        scriptEl.removeAttribute('disabled');
+        publishEl.removeAttribute('disabled');
         scriptEl.focus({ preventScroll: true });
       });
     }
@@ -125,6 +125,7 @@ function init(socket) {
   const faviconLinkEl = document.querySelector('#favicon');
   const scriptEl = document.querySelector('#script');
   const errorEl = document.querySelector('#error');
+  const publishEl = document.querySelector('#publish');
   const frontEl = document.querySelector('#front');
   const maskEl = document.createElement('canvas');
   const faviconEl = document.createElement('canvas');
@@ -140,7 +141,7 @@ function init(socket) {
 
     errorEl.innerHTML = '';
 
-    publishScript(script);
+    applyScript(script);
   });
 
   frontEl.width = frontEl.clientWidth * 2;
