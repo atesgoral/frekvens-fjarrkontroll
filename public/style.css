@@ -10,19 +10,19 @@ h1 {
   font-family: Verdana, sans-serif;
   margin: 0 auto;
   text-align: center;
-  width: 50vw;
-  font-size: 3vw;
+  width: 320px;
+  font-size: 20px;
   text-transform: uppercase;
 }
 
 section {
   margin: 2rem auto 0;
-  width: 50vw;
+  width: 320px;
 }
 
 #frekvens #front {
-  width: 50vw;
-  height: 50vw;
+  width: 320px;
+  height: 320px;
   background: #111;
 }
 
@@ -36,10 +36,10 @@ section {
   color: #ddd;
   border: none;
   font-family: monospace;
-  font-size: 1.5vw;
+  font-size: 12px;
   box-sizing: border-box;
-  padding: 1vw;
-  height: 25vw;
+  padding: 3px;
+  height: 160px;
 }
 
 #code textarea:focus {
@@ -47,9 +47,7 @@ section {
 }
 
 #error {
-  margin: 1rem auto 0;
-  width: 50vw;
   color: #f30;
   font-family: sans-serif;
-  font-size: 2vw;
+  font-size: 12px;
 }
