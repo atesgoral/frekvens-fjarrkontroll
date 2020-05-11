@@ -86,7 +86,7 @@ function init(socket) {
       targetSyncDelta = syncInfo.server - now + latency;
       targetSyncDelta += syncInfo.frekvens.syncDelta;
 
-      console.log('Sync:', latency, targetSyncDelta, syncInfo.frekvens.latency, syncInfo.frekvens.syncDelta);
+      // console.log('Sync:', latency, targetSyncDelta, syncInfo.frekvens.latency, syncInfo.frekvens.syncDelta);
     });
 
     const match = /secret=(.+)/.exec(document.cookie);
@@ -142,6 +142,14 @@ function init(socket) {
     errorEl.innerHTML = '';
 
     applyScript(script);
+  });
+
+  publishEl.addEventListener('click', () => {
+    const script = scriptEl.value;
+
+    errorEl.innerHTML = '';
+
+    publishScript(script);
   });
 
   frontEl.width = frontEl.clientWidth * 2;
