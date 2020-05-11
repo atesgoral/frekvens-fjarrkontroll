@@ -106,7 +106,7 @@ io.on('connection', (socket) => {
 
         syncDelta = syncInfo.server - now + latency;
 
-        console.log('Sync response from FREKVENS:', latency, syncDelta);
+        // console.log('Sync response from FREKVENS:', latency, syncDelta);
       });
 
       socket.on('buttonDown', (button) => {
