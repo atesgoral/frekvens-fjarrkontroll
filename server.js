@@ -109,16 +109,6 @@ io.on('connection', (socket) => {
         // console.log('Sync response from FREKVENS:', latency, syncDelta);
       });
 
-      socket.on('buttonDown', (button) => {
-        console.log('FREKVENS button down:', button);
-        socket.broadcast.emit('buttonDown', button);
-      });
-
-      socket.on('buttonUp', (button) => {
-        console.log('FREKVENS button up:', button);
-        socket.broadcast.emit('buttonUp', button);
-      });
-
       socket.on('disconnect', () => {
         frekvens.socket = null;
         clearInterval(timeSyncInterval);
@@ -134,6 +124,11 @@ io.on('connection', (socket) => {
         overrideScript = script;
         socket.broadcast.emit('script', script);
       });
+
+      socket.on('yellowDown', () => socket.broadcast.emit('yellowDown'));
+      socket.on('yellowUp', () => socket.broadcast.emit('yellowUp'));
+      socket.on('redDown', () => socket.broadcast.emit('redDown'));
+      socket.on('redUp', () => socket.broadcast.emit('redUp'));
 
       socket.on('disconnect', () => {
         ui.socket = null;

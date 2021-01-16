@@ -98,6 +98,8 @@ function init(socket) {
 
       socket.on('drive', () => {
         publishEl.removeAttribute('disabled');
+        yellowEl.removeAttribute('disabled');
+        redEl.removeAttribute('disabled');
         scriptEl.focus({ preventScroll: true });
       });
     }
@@ -106,14 +108,6 @@ function init(socket) {
   socket.on('script', (script) => {
     scriptEl.value = script;
     applyScript(script);
-  });
-
-  socket.on('buttonDown', (button) => {
-    console.log('Button down:', button);
-  });
-
-  socket.on('buttonUp', (button) => {
-    console.log('Button up:', button);
   });
 
   socket.on('disconnect', () => {
@@ -126,6 +120,8 @@ function init(socket) {
   const scriptEl = document.querySelector('#script');
   const errorEl = document.querySelector('#error');
   const publishEl = document.querySelector('#publish');
+  const yellowEl = document.querySelector('#yellow');
+  const redEl = document.querySelector('#red');
   const frontEl = document.querySelector('#front');
   const maskEl = document.createElement('canvas');
   const faviconEl = document.createElement('canvas');
@@ -151,6 +147,11 @@ function init(socket) {
 
     publishScript(script);
   });
+
+  yellowEl.addEventListener('mousedown', () => socket.emit('yellowDown'));
+  yellowEl.addEventListener('mouseup', () => socket.emit('yellowUp'));
+  redEl.addEventListener('mousedown', () => socket.emit('redDown'));
+  redEl.addEventListener('mouseup', () => socket.emit('redUp'));
 
   frontEl.width = frontEl.clientWidth * 2;
   frontEl.height = frontEl.clientHeight * 2;
