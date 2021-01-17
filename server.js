@@ -65,7 +65,6 @@ app.use(express.static('public'));
 const server = http.createServer(app);
 const io = socketIo(server);
 
-const frekvens = { socket: null };
 const ui = { socket: null };
 
 let timeSyncInterval = null;
@@ -94,8 +93,6 @@ io.on('connection', (socket) => {
     if (secret === process.env.FREKVENS_CLIENT_SECRET) {
       console.log('FREKVENS authorized');
 
-      frekvens.socket = socket;
-
       timeSyncInterval = setInterval(() => {
         socket.emit('sync', { client: Date.now() });
       }, 1000);
@@ -109,10 +106,7 @@ io.on('connection', (socket) => {
         // console.log('Sync response from FREKVENS:', latency, syncDelta);
       });
 
-      socket.on('disconnect', () => {
-        frekvens.socket = null;
-        clearInterval(timeSyncInterval);
-      });
+      socket.on('disconnect', () => clearInterval(timeSyncInterval));
     } else if (secret === process.env.UI_CLIENT_SECRET) {
       console.log('UI authorized');
 
