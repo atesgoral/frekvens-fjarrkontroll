@@ -281,4 +281,19 @@ function init(socket) {
   }
 
   requestAnimationFrame(drawFront);
+
+  function watchMidiInputs(access) {
+    for (let input of access.inputs.values()) {
+      input.onmidimessage = (message) => {
+        const [status, data1, data2] = message.data;
+        socket.emit('midi', { status, data1, data2 });
+      };
+    }
+  }
+
+  navigator.requestMIDIAccess()
+    .then((access) => {
+      watchMidiInputs(access);
+      access.onstatechange = () => watchMidiInputs(access);
+    });
 }

@@ -124,6 +124,8 @@ io.on('connection', (socket) => {
       socket.on('redDown', () => socket.broadcast.emit('redDown'));
       socket.on('redUp', () => socket.broadcast.emit('redUp'));
 
+      socket.on('midi', (message) => socket.broadcast.emit('midi', message));
+
       socket.on('disconnect', () => {
         ui.socket = null;
       });
