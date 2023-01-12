@@ -75,7 +75,7 @@ app.post(
     const authorization = request.get('Authorization');
     const {activateScene} = request.body;
 
-    if (authorization !== `Basic ${process.env.DEPLOY_HOOK_SECRET}`) {
+    if (authorization !== `Basic ${process.env.IFTTT_HOOK_SECRET}`) {
       console.log('Unauthorized');
       response.status(401).end();
       return;
