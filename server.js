@@ -10,6 +10,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
 app.post('/deployhook', bodyParser.text({ type: 'application/json' }), (request, response) => {
   console.log('Received deploy hook');
@@ -60,10 +62,27 @@ app.post('/deployhook', bodyParser.text({ type: 'application/json' }), (request,
   }
 });
 
-app.use(express.static('public'));
+app.post('/ifttthook', bodyParser.json({ type: 'application/json' }), (request, response) => {
+  console.log('Received IFTTT hook');
+  
+  const authorization = request.get('Authorization');
+  const {activateScene} = request.body;
+  
+  if (authorization !== 'Basic FOOBAR') {
+    console.log('Unauthorized');
+    response.status(401).end();
+    return;
+  }
 
-const server = http.createServer(app);
-const io = socketIo(server);
+  if (activateScene) {
+    console.log('Activating scene', activateScene);
+    io.emit('activate', activateScene);
+  }
+  
+  response.status(204).end();
+});
+
+app.use(express.static('public'));
 
 const ui = { socket: null };
 
@@ -74,7 +93,7 @@ let syncDelta = 0;
 let overrideScript = null;
 
 io.on('connection', (socket) => {
-  console.log('Client connected');
+  // console.log('Client connected', socket.handshake.headers['x-forwarded-for']);
 
   if (overrideScript) {
     socket.emit('script', overrideScript);
