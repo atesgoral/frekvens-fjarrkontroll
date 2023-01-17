@@ -202,6 +202,15 @@
       return binary;
     }
 
+    async function hexDump(binary, cols = 12) {
+      const hex = Array
+        .from(binary)
+        .map((byte, i) => `0x${byte.toString(16).padStart(2, '0')}${i % cols === cols - 1 ? ',\n' : ', '}`)
+        .join('');
+
+      console.log(hex);
+    }
+
     async function instantiate(binary) {
       const {error, instance} = await WebAssembly.instantiate(binary);
 
@@ -251,6 +260,8 @@
 
         setStatus('Compiling&hellip;');
         const binary = await compile(source);
+
+        hexDump(binary);
 
         setStatus('Instantiating&hellip;');
         instance = await instantiate(binary);
