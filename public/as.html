@@ -146,11 +146,6 @@
           7.5 + Math.cos(s * 1.7) * 7.5 - y
         );
     
-        d += 1 / Math.hypot(
-          7.5 + Math.sin(s * 1.9) * 7.5 - x,
-          7.5 + Math.cos(s * 2.1) * 7.5 - y
-        );
-        
         setXY(x, y, <u8>Math.round(smoothstep(0.75, 1.0, d) * 3));
       }
     }
@@ -325,7 +320,7 @@
       if (!pixels) {
         return;
       }
-      
+
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
           ctx.fillStyle = COLORS[pixels[row * COLS + col] & 3];
