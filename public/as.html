@@ -98,6 +98,8 @@
     }
   </style>
   <script type="text/assemblyscript-template" id="template">
+    memory.grow(1);
+
     const COLS: i32 = 16;
     const ROWS: i32 = 16;
 
@@ -189,9 +191,7 @@
     }
 
     async function compile(source) {
-      const {error, binary} = await asc.compileString(source, {
-        importMemory: true,
-      });
+      const {error, binary} = await asc.compileString(source);
 
       if (error) {
         const re = new Error('Compilation failed');
@@ -202,10 +202,8 @@
       return binary;
     }
 
-    async function instantiate(binary, memory) {
-      const {error, instance} = await WebAssembly.instantiate(binary, {
-        env: {memory},
-      });
+    async function instantiate(binary) {
+      const {error, instance} = await WebAssembly.instantiate(binary);
 
       return instance;
     }
@@ -242,11 +240,8 @@
       status.innerHTML = s;
     }
 
-    const memory = new WebAssembly.Memory({
-      initial: ((COLS * ROWS + 0xffff) & ~0xffff) >>> 16
-    });
-
     let instance = null;
+    let pixels = null;
 
     async function refresh() {
       try {
@@ -258,7 +253,9 @@
         const binary = await compile(source);
 
         setStatus('Instantiating&hellip;');
-        instance = await instantiate(binary, memory);
+        instance = await instantiate(binary);
+
+        pixels = new Uint8Array(instance.exports.memory.buffer);   
 
         setStatus('');
       } catch (error) {
@@ -300,16 +297,13 @@
 
     const ctx = canvas.getContext('2d');
 
-    const pixels = new Uint8Array(memory.buffer);
-
     let frame = 0;
 
     function render() {
       requestAnimationFrame(render);
 
-      pixels.fill(0);
-
       if (instance) {
+        pixels.fill(0);
         instance.exports.render(frame++);
       }
 
@@ -317,6 +311,10 @@
 
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      if (!pixels) {
+        return;
+      }
+      
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
           ctx.fillStyle = COLORS[pixels[row * COLS + col] & 3];
