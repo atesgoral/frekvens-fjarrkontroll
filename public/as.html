@@ -233,9 +233,9 @@
     const separator = '<<<>>>';
     const [preambleText, epilogueText] = interpolate(template, {code: separator}).split(separator);
 
-    preamble.innerHTML = preambleText.trimEnd();
+    preamble.appendChild(document.createTextNode(preambleText.trimEnd()));
     editor.value = sampleCode;
-    epilogue.innerHTML = epilogueText.trimStart();
+    epilogue.appendChild(document.createTextNode(epilogueText.trimStart()));
 
     function setStatus(s, options) {
       status.setAttribute('error', options?.error || '');
