@@ -188,6 +188,7 @@
     async function compile(source) {
       const {error, binary} = await asc.compileString(source, {
         use: ['Math=NativeMathf'],
+        runtime: 'stub',
       });
 
       if (error) {
