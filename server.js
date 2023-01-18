@@ -91,6 +91,7 @@ app.post(
 );
 
 app.use(express.static('public'));
+app.use('/modules', express.static('node_modules'));
 
 const ui = {socket: null};
 

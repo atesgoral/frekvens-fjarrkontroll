@@ -34,6 +34,15 @@
       "resolved": "https://registry.npmjs.org/arraybuffer.slice/-/arraybuffer.slice-0.0.7.tgz",
       "integrity": "sha512-wGUIVQXuehL5TCqQun8OW81jGzAWycqzFF8lFp+GOM5BXLYj3bKNsYC4daB7n6XjCqxQA/qgTJ+8ANR3acjrog=="
     },
+    "assemblyscript": {
+      "version": "0.26.2",
+      "resolved": "https://registry.npmjs.org/assemblyscript/-/assemblyscript-0.26.2.tgz",
+      "integrity": "sha512-pIklgKapk/VV+Qg3JjaSWRm2J2mzcU1qukipcE/OXQ/NzkbjzzuosTjH1bHmvMXP3SV+Kys/TzkBnxSKicUblw==",
+      "requires": {
+        "binaryen": "111.0.0-nightly.20230111",
+        "long": "^5.2.0"
+      }
+    },
     "async-limiter": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/async-limiter/-/async-limiter-1.0.1.tgz",
@@ -61,6 +70,11 @@
       "requires": {
         "callsite": "1.0.0"
       }
+    },
+    "binaryen": {
+      "version": "111.0.0-nightly.20230111",
+      "resolved": "https://registry.npmjs.org/binaryen/-/binaryen-111.0.0-nightly.20230111.tgz",
+      "integrity": "sha512-CUEED/yMHoGeGnOZhQJW5+Luf5z/F58PHK5lw2feh5fbbqauodgnxyYkc2oxSjYwHHRCmFmaYyeQH4zlhRbebg=="
     },
     "blob": {
       "version": "0.0.5",
@@ -374,6 +388,11 @@
       "version": "2.0.1",
       "resolved": "https://registry.npmjs.org/isarray/-/isarray-2.0.1.tgz",
       "integrity": "sha1-o32U7ZzaLVmGXJ92/llu4fM4dB4="
+    },
+    "long": {
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/long/-/long-5.2.0.tgz",
+      "integrity": "sha512-9RTUNjK60eJbx3uz+TEGF7fUr29ZDxR5QzXcyDpeSfeH28S9ycINflOgOlppit5U+4kNTe83KQnMEerw7GmE8w=="
     },
     "media-typer": {
       "version": "0.3.0",

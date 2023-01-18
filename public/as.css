@@ -1,0 +1,79 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  background: #222;
+  color: #eee;
+  font-size: 100%;
+}
+
+#display-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+#canvas {
+  background: black;
+  margin: 1rem;
+}
+
+#editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+#preamble, #epilogue {
+  color: #aaa;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
+}
+
+#preamble {
+  padding-bottom: 0;
+}
+
+#epilogue {
+  padding-top: 0;
+}
+
+#editor {
+  font-size: inherit;
+  width: 100%;
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  box-sizing: border-box;
+  padding: 0 1rem 0 2rem;
+  resize: none;
+}
+
+#editor:focus {
+  outline: none;
+}
+
+#status {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  padding: 1rem;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+#status[error=true] {
+  color: orangered;
+}
