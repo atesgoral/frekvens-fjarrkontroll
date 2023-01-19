@@ -90,6 +90,10 @@ app.post(
   },
 );
 
+app.get('/as.html', (_req, res) => {
+  res.redirect('/obegransad.html');
+});
+
 app.use(express.static('public'));
 app.use('/modules', express.static('node_modules'));
 
