@@ -10,6 +10,7 @@ client.on('connect', () => console.log('Connected'));
 client.on('disconnect', () => console.log('Disconnected'));
 
 let instance = null;
+let binary = null;
 let pixels = null;
 
 async function update(source) {
@@ -17,7 +18,7 @@ async function update(source) {
     pixels = null;
 
     status.set('Compiling');
-    const binary = await compile(source);
+    binary = await compile(source);
 
     console.log(hexDump(binary));
 
@@ -34,6 +35,12 @@ async function update(source) {
 
 editor.on('update', (source) => update(source));
 editor.update();
+
+ui.on('publish', (done) => {
+  console.log(binary);
+  client.emit('binary', Array.from(binary));
+  done();
+});
 
 let frame = 0;
 
