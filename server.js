@@ -103,13 +103,7 @@ let timeSyncInterval = null;
 let latency = 0;
 let syncDelta = 0;
 
-let overrideScript = null;
-
 io.on('connection', (socket) => {
-  if (overrideScript) {
-    socket.emit('script', overrideScript);
-  }
-
   socket.on('sync', (syncInfo) => {
     syncInfo.server = Date.now();
     syncInfo.frekvens = {
@@ -145,8 +139,11 @@ io.on('connection', (socket) => {
       socket.emit('drive');
 
       socket.on('script', (script) => {
-        overrideScript = script;
         socket.broadcast.emit('script', script);
+      });
+
+      socket.on('binary', (binary) => {
+        socket.broadcast.emit('binary', binary);
       });
 
       socket.on('yellowDown', () => socket.broadcast.emit('yellowDown'));
