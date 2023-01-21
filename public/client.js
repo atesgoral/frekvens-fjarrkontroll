@@ -22,6 +22,18 @@ export const client = {
 
     this.emit = socket.emit.bind(socket);
 
+    this.deliver = async (event, data) => {
+      return new Promise((resolve, reject) => {
+        socket.emit(event, data, (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    };
+
     socket.on('connect', () => {
       emitter.emit('connect');
 

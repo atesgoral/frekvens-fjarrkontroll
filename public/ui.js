@@ -22,7 +22,7 @@ export const ui = {
 
     const publishButton = new Button(publishEl);
 
-    publishButton.on('click', (done) => emitter.emit('publish', done));
+    publishButton.on('click', () => emitter.deliver('publish'));
 
     return {editor, display, status};
   },
