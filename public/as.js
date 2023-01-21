@@ -3,7 +3,7 @@ import asc from 'assemblyscript/asc';
 export async function compile(source) {
   const {error, binary} = await asc.compileString(source, {
     use: ['Math=NativeMathf'],
-    runtime: 'stub',
+    // runtime: 'stub',
   });
 
   if (error) {
