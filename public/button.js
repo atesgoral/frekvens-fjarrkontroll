@@ -6,9 +6,10 @@ export class Button {
 
     this.on = emitter.on.bind(emitter);
 
-    el.addEventListener('click', () => {
+    el.addEventListener('click', async () => {
       el.setAttribute('disabled', true);
-      emitter.emit('click', () => el.removeAttribute('disabled'));
+      await emitter.deliver('click');
+      el.removeAttribute('disabled');
     });
   }
 }
