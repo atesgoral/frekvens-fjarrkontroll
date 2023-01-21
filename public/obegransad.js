@@ -1,6 +1,7 @@
 import {client} from './client.js';
 import {ui} from './ui.js';
 import {compile, instantiate, hexDump} from './as.js';
+import {chunks} from './utils.js';
 
 const {editor, display, status} = ui.init(document);
 
@@ -36,10 +37,10 @@ async function update(source) {
 editor.on('update', (source) => update(source));
 editor.update();
 
-ui.on('publish', (done) => {
-  console.log(binary);
-  client.emit('binary', Array.from(binary));
-  done();
+ui.on('publish', async () => {
+  for (const chunk of chunks(binary, 256)) {
+    await client.deliver('binary', Array.from(chunk));
+  }
 });
 
 let frame = 0;

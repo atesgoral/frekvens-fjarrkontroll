@@ -17,3 +17,9 @@ export function unindent(s) {
 export function format(template, values) {
   return template.replace(/\$\{([^}]+)\}/g, (_, key) => values[key]);
 }
+
+export function* chunks(binary, size) {
+  for (let i = 0; i < binary.length; i += size) {
+    yield binary.slice(i, i + size);
+  }
+}
