@@ -126,8 +126,6 @@ io.on('connection', (socket) => {
         latency = (now - syncInfo.client) / 2;
 
         syncDelta = syncInfo.server - now + latency;
-
-        // console.log('Sync response from FREKVENS:', latency, syncDelta);
       });
 
       socket.on('disconnect', () => clearInterval(timeSyncInterval));
@@ -142,8 +140,16 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('script', script);
       });
 
-      socket.on('binary', (binary) => {
-        socket.broadcast.emit('binary', binary);
+      socket.on('binaryBegin', (chunkCount) => {
+        socket.broadcast.emit('binaryBegin', chunkCount);
+      });
+
+      socket.on('binaryChunk', (chunk) => {
+        socket.broadcast.emit('binaryChunk', chunk);
+      });
+
+      socket.on('binaryEnd', () => {
+        socket.broadcast.emit('binaryEnd');
       });
 
       socket.on('yellowDown', () => socket.broadcast.emit('yellowDown'));

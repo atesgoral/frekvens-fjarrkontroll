@@ -1,11 +1,11 @@
 import {client} from './client.js';
 import {ui} from './ui.js';
 import {compile, instantiate, hexDump} from './as.js';
-import {chunks} from './utils.js';
+import {chunks, encode} from './utils.js';
 
 const {editor, display, status} = ui.init(document);
 
-client.init(io());
+client.init(window.io());
 
 client.on('connect', () => console.log('Connected'));
 client.on('disconnect', () => console.log('Disconnected'));
@@ -21,7 +21,7 @@ async function update(source) {
     status.set('Compiling');
     binary = await compile(source);
 
-    console.log(hexDump(binary));
+    // console.log(hexDump(binary));
 
     status.set('Instantiating');
     instance = await instantiate(binary);
@@ -37,10 +37,17 @@ async function update(source) {
 editor.on('update', (source) => update(source));
 editor.update();
 
+const CHUNK_SIZE = 3 * 100;
+
 ui.on('publish', async () => {
-  for (const chunk of chunks(binary, 256)) {
-    await client.deliver('binary', Array.from(chunk));
+  client.emit('binaryBegin', binary.length / CHUNK_SIZE | 0);
+  
+  for (const chunk of chunks(binary, CHUNK_SIZE)) {
+    // await client.deliver('binary', await encode(chunk));
+    client.emit('binaryChunk', await encode(chunk));
   }
+  
+  client.emit('binaryEnd');
 });
 
 let frame = 0;
