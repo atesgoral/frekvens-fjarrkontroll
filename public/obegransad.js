@@ -26,7 +26,9 @@ async function update(source) {
     status.set('Instantiating');
     instance = await instantiate(binary);
 
-    pixels = new Uint8Array(instance.exports.memory.buffer);
+    instance.exports.setup();
+
+    pixels = new Uint8Array(instance.exports.memory.buffer, 0, 256);
 
     status.clear();
   } catch (error) {
@@ -40,13 +42,13 @@ editor.update();
 const CHUNK_SIZE = 3 * 100;
 
 ui.on('publish', async () => {
-  client.emit('binaryBegin', binary.length / CHUNK_SIZE | 0);
-  
+  client.emit('binaryBegin', (binary.length / CHUNK_SIZE) | 0);
+
   for (const chunk of chunks(binary, CHUNK_SIZE)) {
     // await client.deliver('binary', await encode(chunk));
     client.emit('binaryChunk', await encode(chunk));
   }
-  
+
   client.emit('binaryEnd');
 });
 
@@ -61,6 +63,7 @@ function render() {
 
   if (instance) {
     pixels.fill(0);
+    // console.log(instance.exports.test(frame), Math.sin((frame / 60) * 1.1));
     instance.exports.render(frame++);
   }
 
