@@ -28,14 +28,14 @@ export async function encode(binary) {
   return new Promise((resolve) => {
     const blob = new Blob([binary]);
     const reader = new FileReader();
-
+    
     reader.onload = (event) => {
       const dataUrl = event.target.result;
       const [_, base64] = dataUrl.split(',');
-
+      
       resolve(base64);
     };
-
+    
     reader.readAsDataURL(blob);
   });
 }
