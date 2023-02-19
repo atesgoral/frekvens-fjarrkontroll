@@ -129,6 +129,21 @@ io.on('connection', (socket) => {
       });
 
       socket.on('disconnect', () => clearInterval(timeSyncInterval));
+    } else if (secret === process.env.OBEGRANSAD_CLIENT_SECRET) {
+      console.log('OBEGRÄNSAD authorized');
+
+      timeSyncInterval = setInterval(() => {
+        socket.emit('sync', {client: Date.now()});
+      }, 1000);
+
+      socket.on('syncResponse', (syncInfo) => {
+        const now = Date.now();
+        latency = (now - syncInfo.client) / 2;
+
+        syncDelta = syncInfo.server - now + latency;
+      });
+
+      socket.on('disconnect', () => clearInterval(timeSyncInterval));
     } else if (secret === process.env.UI_CLIENT_SECRET) {
       console.log('UI authorized');
 
