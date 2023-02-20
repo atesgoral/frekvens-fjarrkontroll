@@ -104,11 +104,13 @@ let timeSyncInterval = null;
 const frekvens = {
   latency: 0,
   syncDelta: 0,
+  epoch: 0,
 };
 
 const obegransad = {
   latency: 0,
   syncDelta: 0,
+  epoch: 0,
 };
 
 io.on('connection', (socket) => {
@@ -131,6 +133,7 @@ io.on('connection', (socket) => {
         const now = Date.now();
         frekvens.latency = (now - syncInfo.client) / 2;
         frekvens.syncDelta = syncInfo.server - now + frekvens.latency;
+        frekvens.epoch = syncInfo.epoch;
       });
 
       socket.on('disconnect', () => clearInterval(timeSyncInterval));
@@ -142,9 +145,11 @@ io.on('connection', (socket) => {
       }, 1000);
 
       socket.on('syncResponse', (syncInfo) => {
+        console.log('OBEGRÄNSAD sync info', syncInfo);
         const now = Date.now();
         obegransad.latency = (now - syncInfo.client) / 2;
         obegransad.syncDelta = syncInfo.server - now + obegransad.latency;
+        obegransad.epoch = syncInfo.epoch;
       });
 
       socket.on('disconnect', () => clearInterval(timeSyncInterval));
