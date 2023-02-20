@@ -63,7 +63,7 @@
     </script>
     <script type="text/assemblyscript" id="sample-code">
       const i: i32 = <i32>t & 255;
-      const m: i32 = <i32>(t * 16) & 15;
+      const m: i32 = <i32>(t * 16.0) & 15;
       set(i, ON);
       setXY(0, m, ON);
       // const xs0: f32 = (Math.sin(t * 1.1) + 1) * 7.5;
