@@ -137,7 +137,6 @@ io.on('connection', (socket) => {
       }, 1000);
 
       socket.on('syncResponse', (syncInfo) => {
-        console.log('Got syncResponse!', syncInfo);
         const now = Date.now();
         latency = (now - syncInfo.client) / 2;
 
