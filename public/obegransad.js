@@ -17,7 +17,7 @@ let pixels = null;
 let syncDelta = 0;
 let targetSyncDelta = 0;
 
-client.on('sync', (syncInfo) => targetSyncDelta = syncDelta);
+client.on('sync', (syncDelta) => targetSyncDelta = syncDelta);
 
 async function update(source) {
   try {
@@ -60,13 +60,18 @@ let frame = 0;
 function render(t) {
   requestAnimationFrame(render);
 
+  syncDelta += (targetSyncDelta - syncDelta) / 10;
+  
   if (!pixels) {
     return;
   }
-
+  
   if (instance) {
     pixels.fill(0);
-    instance.exports.render(frame++, t);
+    
+    const syncT = Date.now() + syncDelta;
+    
+    instance.exports.render(frame++, syncT / 1000);
   }
 
   display.render(pixels);
