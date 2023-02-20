@@ -59,15 +59,7 @@ export const client = {
 
       let syncDelta = syncInfo.server - now + latency;
 
-      syncDelta += syncInfo.frekvens.syncDelta;
-
-      // console.log(
-      //   'Sync:',
-      //   latency,
-      //   syncDelta,
-      //   syncInfo.frekvens.latency,
-      //   syncInfo.frekvens.syncDelta,
-      // );
+      syncDelta += syncInfo.obegransad.syncDelta;
 
       emitter.emit('sync', syncDelta);
     });

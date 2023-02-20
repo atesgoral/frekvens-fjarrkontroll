@@ -14,6 +14,11 @@ let instance = null;
 let binary = null;
 let pixels = null;
 
+let syncDelta = 0;
+let targetSyncDelta = 0;
+
+client.on('sync', (syncInfo) => targetSyncDelta = syncDelta);
+
 async function update(source) {
   try {
     pixels = null;
