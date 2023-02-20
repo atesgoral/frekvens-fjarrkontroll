@@ -16,6 +16,7 @@ let pixels = null;
 
 let syncDelta = 0;
 let targetSyncDelta = 0;
+let epoch = 0;
 
 client.on('sync', (syncDelta) => targetSyncDelta = syncDelta);
 
@@ -71,7 +72,7 @@ function render(t) {
     
     const syncT = Date.now() + syncDelta;
     
-    instance.exports.render(frame++, syncT / 1000 % 1e5);
+    instance.exports.render(frame++, (syncT - epoch) / 1000);
   }
 
   display.render(pixels);
