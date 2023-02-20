@@ -21,7 +21,7 @@ let epoch = Date.now();
 client.on('sync', ({syncDelta, epoch}) => {
   const now = Date.now();
   const syncT = now + syncDelta;
-  console.log(now, epoch, syncT - epoch);
+  console.log(now, epoch, syncT - epoch, (syncT - epoch) / 1000);
 
   targetSyncDelta = syncDelta;
   epoch = epoch;
