@@ -60,9 +60,9 @@ export const client = {
       let syncDelta = syncInfo.server - now + latency;
 
       syncDelta += syncInfo.obegransad.syncDelta;
-      epoch = 
+      const epoch = syncInfo.obegransad.epoch;
 
-      emitter.emit('sync', {syncDelta, epoch: syncInfo.epoch});
+      emitter.emit('sync', {syncDelta, epoch});
     });
 
     socket.on('drive', () => emitter.emit('drive'));

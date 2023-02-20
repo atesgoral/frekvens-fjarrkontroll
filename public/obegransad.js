@@ -16,9 +16,12 @@ let pixels = null;
 
 let syncDelta = 0;
 let targetSyncDelta = 0;
-let epoch = 0;
+let epoch = Date.now();
 
-client.on('sync', (syncDelta) => targetSyncDelta = syncDelta);
+client.on('sync', ({syncDelta, epoch}) => {
+  targetSyncDelta = syncDelta;
+  epoch = epoch;
+});
 
 async function update(source) {
   try {
