@@ -100,16 +100,22 @@ app.use('/modules', express.static('node_modules'));
 const ui = {socket: null};
 
 let timeSyncInterval = null;
-let latency = 0;
-let syncDelta = 0;
+
+const frekvens = {
+  latency: 0,
+  syncDelta: 0,
+};
+
+const obegransad = {
+  latency: 0,
+  syncDelta: 0,
+};
 
 io.on('connection', (socket) => {
   socket.on('sync', (syncInfo) => {
     syncInfo.server = Date.now();
-    syncInfo.frekvens = {
-      latency,
-      syncDelta,
-    };
+    syncInfo.frekvens = frekvens;
+    syncInfo.obegransad = obegransad;
     socket.emit('syncResponse', syncInfo);
   });
 
@@ -123,9 +129,8 @@ io.on('connection', (socket) => {
 
       socket.on('syncResponse', (syncInfo) => {
         const now = Date.now();
-        latency = (now - syncInfo.client) / 2;
-
-        syncDelta = syncInfo.server - now + latency;
+        frekvens.latency = (now - syncInfo.client) / 2;
+        frekvens.syncDelta = syncInfo.server - now + frekvens.latency;
       });
 
       socket.on('disconnect', () => clearInterval(timeSyncInterval));
@@ -138,9 +143,8 @@ io.on('connection', (socket) => {
 
       socket.on('syncResponse', (syncInfo) => {
         const now = Date.now();
-        latency = (now - syncInfo.client) / 2;
-
-        syncDelta = syncInfo.server - now + latency;
+        obegransad.latency = (now - syncInfo.client) / 2;
+        obegransad.syncDelta = syncInfo.server - now + obegransad.latency;
       });
 
       socket.on('disconnect', () => clearInterval(timeSyncInterval));
