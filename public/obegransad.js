@@ -31,7 +31,7 @@ async function update(source) {
     status.set('Instantiating');
     instance = await instantiate(binary);
 
-    pixels = new Uint8Array(instance.exports.memory.buffer);
+    pixels = new Uint8Array(instance.exports.memory.buffer, 0, 256);
 
     status.clear();
   } catch (error) {
