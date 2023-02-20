@@ -16,15 +16,10 @@ let pixels = null;
 
 let syncDelta = 0;
 let targetSyncDelta = 0;
-let epoch = Date.now();
+let epoch = 1667102400000; // new Date('2022-10-30T00:00:00').getTime()
 
-client.on('sync', ({syncDelta, epoch}) => {
-  const now = Date.now();
-  const syncT = now + syncDelta;
-  console.log(now, epoch, syncT - epoch, (syncT - epoch) / 1000);
-
+client.on('sync', ({syncDelta}) => {
   targetSyncDelta = syncDelta;
-  epoch = epoch;
 });
 
 async function update(source) {
