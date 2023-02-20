@@ -52,7 +52,7 @@ ui.on('publish', async () => {
 
 let frame = 0;
 
-function render() {
+function render(t) {
   requestAnimationFrame(render);
 
   if (!pixels) {
@@ -61,7 +61,7 @@ function render() {
 
   if (instance) {
     pixels.fill(0);
-    instance.exports.render(frame++);
+    instance.exports.render(frame++, t);
   }
 
   display.render(pixels);
