@@ -73,7 +73,9 @@ function render(t) {
     
     const syncT = Date.now() + syncDelta;
     
-    instance.exports.render(frame++, syncT / 1000);
+    //instance.exports.render(frame++, syncT / 1000);
+    //instance.exports.render(0, syncT / 1000);
+    instance.exports.render(0, 0);
   }
 
   display.render(pixels);
