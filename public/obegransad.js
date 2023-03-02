@@ -75,7 +75,7 @@ function render(t) {
     
     //instance.exports.render(frame++, syncT / 1000);
     //instance.exports.render(0, syncT / 1000);
-    instance.exports.render(0, 0);
+    instance.exports.render(0, frame++, syncT / 1000);
   }
 
   display.render(pixels);
