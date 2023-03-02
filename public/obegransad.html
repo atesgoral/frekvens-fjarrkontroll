@@ -66,7 +66,7 @@
       const m: i32 = <i32>(<i64>(t * 16) & 15);
       set(i, ON);
       setXY(0, m, ON);
-      const j: i32 = <i32>((Mathf.sin(<f32>t) + 1) * 7.5);
+      const j: i32 = <i32>((Mathf.sin(<f32>(t / 1000)) + 1) * 7.5);
       setXY(j, 0, ON);
 
       return;
