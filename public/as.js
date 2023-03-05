@@ -16,7 +16,9 @@ export async function compile(source) {
 }
 
 export async function instantiate(binary) {
-  const {error, instance} = await WebAssembly.instantiate(binary);
+  const {error, instance} = await WebAssembly.instantiate(binary, {
+    imports: {Math},
+  });
 
   if (error) {
     const re = new Error('Instantiation failed');
