@@ -62,17 +62,17 @@
       }
     </script>
     <script type="text/assemblyscript" id="sample-code">
-      const pos: f64 = (Math.sin(t) + 1) * 7.5;
-      const j: u8 = <u8>Math.round(pos);
-      setXY(j, 0, ON);
-      return;
+      //const pos: f64 = (Math.sin(t) + 1) * 7.5;
+      //const j: u8 = <u8>Math.round(pos);
+      //setXY(j, 0, ON);
+      //return;
       
       const xs0: f64 = (Math.sin(t * 1.1) + 1) * 7.5;
       const ys0: f64 = (Math.cos(t * 1.3) + 1) * 7.5;
       const xs1: f64 = (Math.sin(t * 1.5) + 1) * 7.5;
       const ys1: f64 = (Math.cos(t * 1.7) + 1) * 7.5;
-      const xs2: f64 = (Math.sin(t * 1.9) + 1) * 7.5;
-      const ys2: f64 = (Math.cos(t * 2.1) + 1) * 7.5;
+      //const xs2: f64 = (Math.sin(t * 1.9) + 1) * 7.5;
+      //const ys2: f64 = (Math.cos(t * 2.1) + 1) * 7.5;
 
       for (let y: u8 = 0; y < ROWS; y++) {
         let fy: f64 = y;
@@ -93,10 +93,10 @@
           
           d += 2 / Math.sqrt(dx * dx + dy * dy);
 
-          dx = xs2 - fx;
-          dy = (ys2 - fy) / ASPECT_RATIO;
+          //dx = xs2 - fx;
+          //dy = (ys2 - fy) / ASPECT_RATIO;
           
-          d += 1.5 / Math.sqrt(dx * dx + dy * dy);
+          //d += 1.5 / Math.sqrt(dx * dx + dy * dy);
 
           setXY(x, y, <u8>Math.round(smoothstep(0.75, 1.0, d) * 3));
         }

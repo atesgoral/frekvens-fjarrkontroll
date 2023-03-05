@@ -2,7 +2,7 @@ import asc from 'assemblyscript/asc';
 
 export async function compile(source) {
   const {error, binary} = await asc.compileString(source, {
-    use: ['Math=JSMath'],
+    // use: ['Math=JSMath'],
     // runtime: 'stub',
   });
 
@@ -16,9 +16,7 @@ export async function compile(source) {
 }
 
 export async function instantiate(binary) {
-  const {error, instance} = await WebAssembly.instantiate(binary, {
-    imports: {Math},
-  });
+  const {error, instance} = await WebAssembly.instantiate(binary);
 
   if (error) {
     const re = new Error('Instantiation failed');
