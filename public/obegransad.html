@@ -57,7 +57,7 @@
         return t * t * (3 - 2 * t);
       }
 
-      export function render(frame: i32, t: f64): void {
+      export function render(frame: i32, t: f32): void {
         ${code}
       }
     </script>
@@ -66,7 +66,9 @@
       const m: i32 = <i32>(<i64>(t * 16) & 15);
       set(i, ON);
       setXY(0, m, ON);
-      const j: i32 = <i32>((Mathf.sin(<f32>(t / 1000)) + 1) * 7.5);
+      const s: f32 = Mathf.sin(<f32>(t));
+      const pos: f32 = (s + 1) * 7.5
+      const j: i32 = <i32>pos;
       setXY(j, 0, ON);
 
       return;
