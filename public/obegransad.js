@@ -58,13 +58,12 @@ ui.on('publish', async () => {
 });
 
 let frame = 0;
-let epoch = new Date(2023, 0, 1).getTime();
+let epoch = new Date(2023, 2, 1).getTime();
 
 function render(t) {
   requestAnimationFrame(render);
 
   syncDelta += (targetSyncDelta - syncDelta) / 10;
-  // console.log(syncDelta);
   
   if (!pixels) {
     return;
@@ -73,11 +72,10 @@ function render(t) {
   if (instance) {
     pixels.fill(0);
     
-    const syncT = Date.now() + epoch - syncDelta;
-    // console.log(syncT);
+    const syncT = Date.now() - epoch - syncDelta;
+    // const syncT = t;
     
-    instance.exports.render(frame++, t / 1000);
-    // instance.exports.render(frame++, syncT / 1000);
+    instance.exports.render(frame++, syncT / 1000);
   }
 
   display.render(pixels);
