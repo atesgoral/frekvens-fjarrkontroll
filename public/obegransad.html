@@ -40,11 +40,11 @@
 
       const ASPECT_RATIO: f64 = 13 / 19.25;
 
-      function set(index: i32, color: u8): void {
+      function set(index: u8, color: u8): void {
         store<u8>(index, color);
       }
 
-      function setXY(x: i32, y: i32, color: u8): void {
+      function setXY(x: u8, y: u8, color: u8): void {
         store<u8>(x + y * COLS, color);
       }
 
@@ -79,10 +79,10 @@
       const xs2: f64 = (Math.sin(t * 1.9) + 1) * 7.5;
       const ys2: f64 = (Math.cos(t * 2.1) + 1) * 7.5;
 
-      for (let y: i32 = 0; y < ROWS; y++) {
+      for (let y: u8 = 0; y < ROWS; y++) {
         let fy: f64 = y;
         
-        for (let x: i32 = 0; x < COLS; x++) {
+        for (let x: u8 = 0; x < COLS; x++) {
           let fx: f64 = x;
           
           let d: f64 = 0;
